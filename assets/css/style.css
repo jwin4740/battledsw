@@ -1,0 +1,39 @@
+*{
+	box-sizing: border-box;
+}
+
+#style{
+	width: 75%;
+	margin: auto;
+	
+}
+
+.weekday{
+	display: inline-block;
+	float: left;
+	
+	width: 130px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+
+#test{
+	clear: both;
+	width: 75%;
+	margin: auto;
+	
+}
+
+.dates{
+	float: left;
+	border: solid 2px black;
+	height: 115px;
+	width: 130px;
+	cursor: pointer;
+}
+
+
+
+	
