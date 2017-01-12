@@ -1,49 +1,36 @@
-var boolBorder = true;
+var boolBorder = false;
+
+$(document).ready(function() {
 
 
- $(document).ready(function() {
-
-for (var i = 1; i < 31; i++)
-{
-	var monthBox = $("<div>");
-	monthBox.addClass("dates");
-	monthBox.text(i);
-	$("#test").append(monthBox);
-
-}
+    for (var i = 1; i < 31; i++) {
+        var monthBox = $("<div>");
+        monthBox.addClass("datesblack");
+        monthBox.text(i);
+        $(".test").append(monthBox);
+    }
 
 
-$(".dates").on("click", function(){
-	if (boolBorder === true)
-	{
-		$(this).css({"border": "solid 4px #00ff00"});
-		console.log(this);
-	    boolBorder = false;
-	    // document.onkeyup = function(event){
-	    // userKey = event.key;
-	    // console.log(userKey);	
-	    // 	if (userKey === "r")
-	    // 	{
-	    // 		$(".dates").css(({"border": "solid 4px purple"}));
-	    // 		console.log(this);
-	    // 	}
-	    // };
-
-	}
-
-	else if (boolBorder === false)
-	{
-		$(this).css({"border": "solid 2px black"});
-	    boolBorder = true;
-	    console.log(this)
-
-	}
-	
-})
+    $(".datesblack").on("click", function() {
+        var location = $(this);
+        location.css({ "border": "solid 2px yellow" });
+        document.onkeyup = function(event) {
+            if (event.key === "r") {
+                location.css({ "border": "solid 4px red" });
+            }
+            if (event.key === "b") {
+                location.css({ "border": "solid 2px black" });
+            }
+        }
 
 
+    });
+    $("#saveme").on("click", function(event) {
 
-// $(".dates").on("click", function(){
-// 	$(this).css({"border": "solid 4px red"});
-// })
+        var testerval = $("#tester").val().trim();
+        localStorage.setItem("testvalue", testerval);
+        $("#runway").append(localStorage.getItem("testvalue"));
+    });
+    $("#runway").append(localStorage.getItem("testvalue"));
+
 });

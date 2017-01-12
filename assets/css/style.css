@@ -1,39 +1,47 @@
-*{
-	box-sizing: border-box;
+* {
+    box-sizing: border-box;
 }
 
-#style{
-	width: 75%;
-	margin: auto;
-	
+#style {
+    width: 75%;
+    margin: auto;
 }
 
-.weekday{
-	display: inline-block;
-	float: left;
-	
-	width: 130px;
-	text-align: center;
-	font-size: 18px;
-	font-weight: 600;
-	margin-bottom: 5px;
+.weekday {
+    display: inline-block;
+    float: left;
+    width: 130px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
-#test{
-	clear: both;
-	width: 75%;
-	margin: auto;
-	
+.test {
+
+    width: 75%;
+    margin: auto;
 }
 
-.dates{
-	float: left;
-	border: solid 2px black;
-	height: 115px;
-	width: 130px;
-	cursor: pointer;
+.datesblack {
+    float: left;
+    border: solid 2px black;
+    height: 115px;
+    width: 130px;
+    cursor: pointer;
 }
 
+.datesred {
+    float: left;
+    border: solid 4px red;
+    height: 115px;
+    width: 130px;
+    cursor: pointer;
+}
 
-
-	
+.grayback {
+    background-color: grey;
+    height: 115px;
+    width: 130px;
+    cursor: pointer;
+}
