@@ -1,6 +1,6 @@
 var boolBorder = false;
 var confessionArray = [];
-var year, months, days;
+var year, month, days;
 var currentYear = moment().year();
 var currentMonth = moment().month();
 var monthLength = moment().daysInMonth();
@@ -33,12 +33,17 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-
 database.ref().once("value", function(snapshot) {
     if (snapshot.child("2017").exists()) {
-        console.log("it is there");
+        for (var i = 1; i < 29; i++)
+        database.ref("/2017/February/" + i).on("child_added", function (childSnapshot){
+            var day = childSnapshot.val().confession;
+            confessionArray.push(day);
+        });
     }
-
+    console.log(confessionArray);
+});
+database.ref().once("value", function(snapshot) {
     if (!snapshot.child("2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
             var tempMonth = yearArray[i].month;
@@ -46,7 +51,7 @@ database.ref().once("value", function(snapshot) {
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
                 daysRef.push({
-                    confession: "yes",
+                    confession: false,
                     init: "no"
                 });
             }
