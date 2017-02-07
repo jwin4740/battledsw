@@ -6,14 +6,13 @@ var currentMonth = moment().month();
 var monthLength = moment().daysInMonth();
 var yearArray = [];
 
-function yearConstruct (year, month, monthLength) {
+function yearConstruct(year, month, monthLength) {
     this.year = year,
-    this.month = month,
-    this.monthLength = monthLength
+        this.month = month,
+        this.monthLength = monthLength
 }
 
-for (var i = 1; i <= 12; i++)
-{
+for (var i = 1; i <= 12; i++) {
     month = moment().month(i - 1).format("MMMM");
     monthLength = moment(i, "M").daysInMonth();
     var yearConstructObj = new yearConstruct(currentYear, month, monthLength);
@@ -33,25 +32,6 @@ var config = {
 firebase.initializeApp(config);
 
 var database = firebase.database();
-var currentYearRef = database.ref("/2017");
-var lastYearRef = database.ref("/lastYear");
-var monthsRef = database.ref("/2017/months");
-
-
-
-
-// var monthsRef = database.ref("/2017/months/January");
-// var monthsRef = database.ref("/2017/months/February");
-// var monthsRef = database.ref("/2017/months/March");
-
-// var monthsRef = database.ref("/2017/months/April");
-// var monthsRef = database.ref("/2017/months/May");
-// var monthsRef = database.ref("/2017/months/June");
-// var monthsRef = database.ref("/2017/months/July");
-
-var daysRef = database.ref("/2017/months/days");
-
-
 
 
 database.ref().once("value", function(snapshot) {
@@ -60,11 +40,17 @@ database.ref().once("value", function(snapshot) {
     }
 
     if (!snapshot.child("2017").exists()) {
-
-        monthsRef.push({
-            january: "hello",
-            february: "goodbye"
-        });
+        for (var i = 0; i < yearArray.length; i++) {
+            var tempMonth = yearArray[i].month;
+            var tempDaysInMonth = yearArray[i].monthLength;
+            for (var j = 1; j < tempDaysInMonth + 1; j++) {
+                var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
+                daysRef.push({
+                    confession: "yes",
+                    init: "no"
+                });
+            }
+        }
     }
 });
 
