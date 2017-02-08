@@ -5,6 +5,11 @@ var currentYear = moment().year();
 var currentMonth = moment().month();
 var monthLength = moment().daysInMonth();
 var yearArray = [];
+var tempMonth = 0;
+var tempDaysInMonth = 0;
+var monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August",
+    "September", "October", "November", "December"
+];
 
 // Initialize Firebase
 var config = {
@@ -23,6 +28,13 @@ function yearConstruct(year, month, monthLength) {
         this.monthLength = monthLength
 }
 
+
+function dateConstruct(day, confessionBool) {
+    this.day = day,
+        this.confessionBool = confessionBool
+}
+
+
 for (var i = 1; i <= 12; i++) {
     month = moment().month(i - 1).format("MMMM");
     monthLength = moment(i, "M").daysInMonth();
@@ -31,77 +43,79 @@ for (var i = 1; i <= 12; i++) {
 }
 console.log(yearArray);
 
-// if firebase is already established then it pushes the values to confessionArray
-database.ref().once("value", function(snapshot) {
-    if (snapshot.child("2017").exists()) {
-        for (var i = 1; i < 32; i++) {
-            database.ref("/2017/January/" + i).on("child_added", function(childSnapshot) {
-                var day = childSnapshot.val().confession;
-                confessionArray.push(day);
-            });
-        }
-    }
-    setTimeout(initiatePage, 3000); // will work until I learn promises
-    console.log(confessionArray);
-});
+
 database.ref().once("value", function(snapshot) {
     if (!snapshot.child("2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
-            var tempMonth = yearArray[i].month;
-            var tempDaysInMonth = yearArray[i].monthLength;
+            tempMonth = yearArray[i].month;
+            tempDaysInMonth = yearArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
                 daysRef.push({
-                    confession: true,
-                    init: "no"
+                    confession: false,
+                    init: "no",
+                    month: tempMonth
                 });
             }
         }
     }
-    // initiatePage();
+});
+
+// if firebase is already established then it pushes the values to confessionArray
+database.ref().once("value", function(snapshot) {
+    if (snapshot.child("2017").exists()) {
+        for (var i = 0; i < yearArray.length; i++) {
+            tempMonth = yearArray[i].month;
+            tempDaysInMonth = yearArray[i].monthLength;
+            for (var j = 1; j < tempDaysInMonth + 1; j++) {
+                database.ref("/2017/" + tempMonth + "/" + j).on("child_added", function(childSnapshot) {
+                    var day = childSnapshot.val().confession;
+                    confessionArray.push(day);
+                });
+            }
+            setTimeout(initiatePage, 100);
+        }
+    }
+     // will work until I learn promises
+    console.log(confessionArray);
 });
 
 
-
-console.log(confessionArray);
-
-
-
-function dateConstruct(day, confessionBool) {
-    this.day = day,
-        this.confessionBool = confessionBool
-}
-
-
-console.log(confessionArray[0]);
-
 function initiatePage() {
-    for (var i = 1; i < 31; i++) {
-        var monthBox = $("<div>");
+var monthHead = $("<br style='clear : both;'><br><h2 class='monthHeader'>" + tempMonth + "</h2>");
+    for (var i = 1; i < tempDaysInMonth + 1; i++) {
+        var monthBox = $("<div class='" + tempMonth + "'></div>");
 
         if (confessionArray[i] === true) {
-            console.log("show red");
-            monthBox.addClass("datesred");
+            console.log("show green");
+            monthBox.addClass("datesgreen");
         } else {
             monthBox.addClass("datesblack");
-            console.log("show black")
+            console.log("show black");
         }
 
         monthBox.attr("data-value", i);
         monthBox.text(i);
-        $(".test").append(monthBox);
+        $(".test").append(monthHead).append(monthBox);
     }
 }
 
-// dateRef.on("child_added", function(childSnapshot) {
-//     var fireConfess = childSnapshot.val().confessionBool;
-//     confessionArray.push(fireConfess);
-// });
 
-// console.log(confessionArray);
-// $(".datesblack").on("click", function() {
-//     var date = $(this)[0];
-//     console.log(date.attr());
-//     $(this).css({ "border": "solid 3px red" });
+$(".test").on("click", ".datesblack", function() {
+    $(this).toggleClass("datesgreen");
+    var clickedVal = parseInt($(this)[0].innerText);
+    console.log(clickedVal);
 
-// });
+    if ($(this).hasClass("datesgreen")) {
+        console.log("pass");
+    } else {
+        console.log("fail");
+    }
+
+    // var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
+    //             daysRef.push({
+    //                 confession: false,
+    //                 init: "no"
+    //             });
+
+});
