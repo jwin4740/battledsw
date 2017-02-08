@@ -5,8 +5,6 @@ var currentYear = moment().year();
 var currentMonth = moment().month();
 var monthLength = moment().daysInMonth();
 var yearArray = [];
-var tempMonth = 0;
-var tempDaysInMonth = 0;
 var monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August",
     "September", "October", "November", "December"
 ];
@@ -29,8 +27,9 @@ function yearConstruct(year, month, monthLength) {
 }
 
 
-function dateConstruct(day, confessionBool) {
-    this.day = day,
+function confessionConstruct(month, day, confessionBool) {
+    this.month = month,
+        this.day = day,
         this.confessionBool = confessionBool
 }
 
@@ -47,17 +46,15 @@ console.log(yearArray);
 database.ref().once("value", function(snapshot) {
     if (!snapshot.child("2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
-            tempMonth = yearArray[i].month;
-            tempDaysInMonth = yearArray[i].monthLength;
+            var tempMonth = yearArray[i].month;
+            var tempDaysInMonth = yearArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
-                daysRef.push({
-                    confession: false,
-                    init: "no",
-                    month: tempMonth
-                });
+                var confessionConstructObj = new confessionConstruct(tempMonth, j, false);
+                daysRef.set({ confessionConstructObj });
             }
         }
+        console.log("it doesnt exist");
     }
 });
 
@@ -65,26 +62,29 @@ database.ref().once("value", function(snapshot) {
 database.ref().once("value", function(snapshot) {
     if (snapshot.child("2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
-            tempMonth = yearArray[i].month;
-            tempDaysInMonth = yearArray[i].monthLength;
+            var tempMonth = yearArray[i].month;
+            var tempDaysInMonth = yearArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 database.ref("/2017/" + tempMonth + "/" + j).on("child_added", function(childSnapshot) {
-                    var day = childSnapshot.val().confession;
+                    var day = childSnapshot.val().confessionBool;
                     confessionArray.push(day);
+                    console.log(confessionArray);
                 });
             }
-            setTimeout(initiatePage, 100);
+            setTimeout(initiatePage(tempMonth, tempDaysInMonth), 15000);
         }
+        
     }
-     // will work until I learn promises
-    console.log(confessionArray);
+    // will work until I learn promises
+    console.log(yearArray);
 });
 
 
-function initiatePage() {
-var monthHead = $("<br style='clear : both;'><br><h2 class='monthHeader'>" + tempMonth + "</h2>");
+function initiatePage(tempMonth, tempDaysInMonth) {
+    var monthHead = $("<h2 class='monthHeader'>" + tempMonth + "</h2>");
+    $(".test").append(monthHead);
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
-        var monthBox = $("<div class='" + tempMonth + "'></div>");
+        var monthBox = $("<div class='" + tempMonth + "day'></div>");
 
         if (confessionArray[i] === true) {
             console.log("show green");
@@ -92,12 +92,16 @@ var monthHead = $("<br style='clear : both;'><br><h2 class='monthHeader'>" + tem
         } else {
             monthBox.addClass("datesblack");
             console.log("show black");
+           
         }
 
         monthBox.attr("data-value", i);
+        monthBox.attr("data-month", tempMonth);
         monthBox.text(i);
-        $(".test").append(monthHead).append(monthBox);
+        $(".test").append(monthBox);
     }
+    console.log(confessionArray)
+    $(".test").append("<br style='clear: both;'><hr>");
 }
 
 
@@ -105,11 +109,23 @@ $(".test").on("click", ".datesblack", function() {
     $(this).toggleClass("datesgreen");
     var clickedVal = parseInt($(this)[0].innerText);
     console.log(clickedVal);
+    var month = ($(this)[0].dataset.month);
 
     if ($(this).hasClass("datesgreen")) {
-        console.log("pass");
+
+       
+            var confessionConstructObj = new confessionConstruct (month, clickedVal, true);
+            database.ref("/2017/" + month + "/" + clickedVal).set({
+                confessionConstructObj
+            });
+   
+
     } else {
-        console.log("fail");
+        var confessionConstructObj = new confessionConstruct (month, clickedVal, false);
+            database.ref("/2017/" + month + "/" + clickedVal).set({
+                confessionConstructObj
+            });
+     
     }
 
     // var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
