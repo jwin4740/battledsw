@@ -69,11 +69,13 @@ database.ref().once("value", function(snapshot) {
                     var day = childSnapshot.val().confessionBool;
                     confessionArray.push(day);
                     console.log(confessionArray);
+
                 });
             }
-            setTimeout(initiatePage(tempMonth, tempDaysInMonth), 15000);
+            // setTimeout(initiatePage(tempMonth, tempDaysInMonth), 500);
+            
         }
-        
+        setTimeout(initiatePage(tempMonth, tempDaysInMonth), 5000);
     }
     // will work until I learn promises
     console.log(yearArray);
@@ -91,8 +93,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
             monthBox.addClass("datesgreen");
         } else {
             monthBox.addClass("datesblack");
-            console.log("show black");
-           
+
         }
 
         monthBox.attr("data-value", i);
@@ -113,19 +114,19 @@ $(".test").on("click", ".datesblack", function() {
 
     if ($(this).hasClass("datesgreen")) {
 
-       
-            var confessionConstructObj = new confessionConstruct (month, clickedVal, true);
-            database.ref("/2017/" + month + "/" + clickedVal).set({
-                confessionConstructObj
-            });
-   
+
+        var confessionConstructObj = new confessionConstruct(month, clickedVal, true);
+        database.ref("/2017/" + month + "/" + clickedVal).set({
+            confessionConstructObj
+        });
+
 
     } else {
-        var confessionConstructObj = new confessionConstruct (month, clickedVal, false);
-            database.ref("/2017/" + month + "/" + clickedVal).set({
-                confessionConstructObj
-            });
-     
+        var confessionConstructObj = new confessionConstruct(month, clickedVal, false);
+        database.ref("/2017/" + month + "/" + clickedVal).set({
+            confessionConstructObj
+        });
+
     }
 
     // var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
