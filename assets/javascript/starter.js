@@ -1,4 +1,12 @@
 // day variables
+
+$('.collapsible').collapsible();
+
+
+// and change the toggle function to look like this-
+
+
+
 var confessionArray = ["blank"];
 var fallArray = ["blank"];
 var massArray = ["blank"];
@@ -113,7 +121,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
     console.log(massArray);
     var monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
     var monthHead = $("<h2 class='monthHeader'>" + tempMonth + "</h2>");
-    $(".test").append(monthContainer);
+    $("#" + tempMonth).append(monthContainer);
     monthContainer.append(monthHead);
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
         matchCount++;
@@ -134,7 +142,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
 
     }
 
-    $(".test").append("<br style='clear: both;'><hr>");
+    $("#" + tempMonth).append("<br style='clear: both;'><hr>");
 
 
     if (monthCount < 12) {
@@ -145,20 +153,24 @@ function initiatePage(tempMonth, tempDaysInMonth) {
 }
 
 
-$(".test").on("click", ".datesblack", function() {
+$("li").on("click", ".datesblack", function() {
+    console.log($(this)[0]);
+    console.log($(this)[0].attributes[2].nodeValue);
     if (clickerBool === true) {
 
-clickerBool = false;
+       
 
-        var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
-        var subclass = ($(this));
-        console.log(subclass);
-       var parentClass = ($(this)[0].parentElement.classList[0]);
+    //     var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
+    //     var subclass = ($(this));
+    //     console.log(subclass);
+    //     var parentClass = ($(this)[0].parentElement.classList[0]);
+    var togClass = $(this)[0];
+    console.log(togClass);
         $(this).toggleClass("datesgreen");
-        var clickedVal = parseInt($(this)[0].innerText);
+        var clickedVal = parseInt($(this)[0].firstChild.data);
         console.log(clickedVal);
-        var month = ($(this)[0].dataset.month);
-        $("." + parentClass).append(popup);
+        var month = $(this)[0].attributes[2].nodeValue
+    //     // $("." + parentClass).append(popup);
 
         if ($(this).hasClass("datesgreen")) {
 
@@ -175,10 +187,4 @@ clickerBool = false;
     }
 });
 
-$(".test").on("click", "#confirm", function () {
-    
-    $(".popup").remove();
-    clickerBool = true;
 
-
-});
