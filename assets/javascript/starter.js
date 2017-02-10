@@ -88,7 +88,7 @@ function startUp(monthCount) {
             }
             setTimeout(function() {
                 initiatePage(tempMonth, tempDaysInMonth)
-            }, 500);
+            }, 200);
             // setTimeout(initiatePage(tempMonth, tempDaysInMonth), 5000);
         }
         // will work until I learn promises
@@ -108,7 +108,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         var confessionInt = confessionString[matchCount];
        
         if (confessionInt === "a") {
-            console.log(confessionInt);
+           
             console.log("show green");
             monthBox.addClass("datesgreen");
         }
@@ -118,7 +118,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         monthBox.text(i);
         $(".test").append(monthBox);
     }
-    console.log(confessionString);
+  
     $(".test").append("<br style='clear: both;'><hr>");
 
 
