@@ -25,18 +25,26 @@ body {
     font-weight: 600;
     margin-bottom: 5px;
 }
+
 hr {
     clear: both;
-    margin-top : 20px;
+    margin-top: 20px;
     margin-bottom: 10px;
 }
+
 #datesContainer {
     width: 75%;
     height: 600px;
     margin-left: 25px;
 }
 
+.monthcontainer{
+    width: 100%;
+    border: solid 2px black;
+    height: 600px;
+}
 .datesblack {
+    position: relative;
     float: left;
     border: solid 1px black;
     height: 105px;
@@ -45,6 +53,7 @@ hr {
 }
 
 .datesgreen {
+    position: relative;
     float: left;
     border: solid 4px #00ff00;
     height: 105px;
@@ -52,9 +61,13 @@ hr {
     cursor: pointer;
 }
 
-.grayback {
-    background-color: grey;
-    height: 100px;
+.popup {
+    position: relative;
+    border: solid 2px gray;
+    height: 90px;
     width: 115px;
     cursor: pointer;
+    z-index: 2;
+    background-color: gray;
+    opacity: 0.85;
 }

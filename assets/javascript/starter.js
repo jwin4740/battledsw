@@ -1,8 +1,9 @@
-var boolBorder = false;
-var confessionString = "d";
-var confessionString2 = "d";
-var confessionString3 = "d";
-var confessionString4 = "d";
+// day variables
+var confessionArray = ["blank"];
+var fallArray = ["blank"];
+var massArray = ["blank"];
+
+var clickerBool = true;
 
 var year, month, days;
 var currentYear = moment().year();
@@ -14,6 +15,8 @@ var monthsArray = ["January", "February", "March", "April", "May", "June", "July
 ];
 var monthCount = 0;
 var matchCount = 0;
+
+
 
 // Initialize Firebase
 var config = {
@@ -33,10 +36,12 @@ function yearConstruct(year, month, monthLength) {
 }
 
 
-function confessionConstruct(month, day, confessionBool) {
+function confessionConstruct(month, day, confessionBool, numFalls, numMass) {
     this.month = month,
         this.day = day,
-        this.confessionBool = confessionBool
+        this.confessionBool = confessionBool,
+        this.numFalls = numFalls,
+        this.numMass = numMass;
 }
 
 
@@ -56,7 +61,7 @@ database.ref().once("value", function(snapshot) {
             var tempDaysInMonth = yearArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
-                var confessionConstructObj = new confessionConstruct(tempMonth, j, "b");
+                var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
                 daysRef.set({ confessionConstructObj });
             }
         }
@@ -64,7 +69,7 @@ database.ref().once("value", function(snapshot) {
     }
 });
 
-// if firebase is already established then it pushes the values to confessionString
+// if firebase is already established then it pushes the values to confessionArray
 
 
 startUp(monthCount);
@@ -78,7 +83,12 @@ function startUp(monthCount) {
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 database.ref("/2017/" + tempMonth + "/" + j).on("child_added", function(childSnapshot) {
                     var day = childSnapshot.val().confessionBool;
-                    confessionString += day;
+                    var fall = childSnapshot.val().numFalls;
+                    var mass = childSnapshot.val().numMass;
+                    confessionArray.push(day);
+                    fallArray.push(fall);
+                    massArray.push(mass);
+
 
 
                 });
@@ -98,17 +108,21 @@ function startUp(monthCount) {
 
 function initiatePage(tempMonth, tempDaysInMonth) {
     monthCount++;
-    
+    console.log(confessionArray);
+    console.log(fallArray);
+    console.log(massArray);
+    var monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
     var monthHead = $("<h2 class='monthHeader'>" + tempMonth + "</h2>");
-    $(".test").append(monthHead);
+    $(".test").append(monthContainer);
+    monthContainer.append(monthHead);
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
         matchCount++;
-        var monthBox = $("<div class='" + tempMonth + "day'></div>");
+        var monthBox = $("<div class='" + tempMonth + "day'>");
         monthBox.addClass("datesblack");
-        var confessionInt = confessionString[matchCount];
-       
+        var confessionInt = confessionArray[matchCount];
+
         if (confessionInt === "a") {
-           
+
             console.log("show green");
             monthBox.addClass("datesgreen");
         }
@@ -116,37 +130,55 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         monthBox.attr("data-value", i);
         monthBox.attr("data-month", tempMonth);
         monthBox.text(i);
-        $(".test").append(monthBox);
+        monthContainer.append(monthBox);
+
     }
-  
+
     $(".test").append("<br style='clear: both;'><hr>");
 
 
     if (monthCount < 12) {
 
-        startUp(monthCount)
+        startUp(monthCount);
 
     }
 }
 
 
 $(".test").on("click", ".datesblack", function() {
-    $(this).toggleClass("datesgreen");
-    var clickedVal = parseInt($(this)[0].innerText);
-    console.log(clickedVal);
-    var month = ($(this)[0].dataset.month);
+    if (clickerBool === true) {
 
-    if ($(this).hasClass("datesgreen")) {
+clickerBool = false;
 
-        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-            confessionBool: "a"
-        })
+        var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
+        var subclass = ($(this));
+        console.log(subclass);
+       var parentClass = ($(this)[0].parentElement.classList[0]);
+        $(this).toggleClass("datesgreen");
+        var clickedVal = parseInt($(this)[0].innerText);
+        console.log(clickedVal);
+        var month = ($(this)[0].dataset.month);
+        $("." + parentClass).append(popup);
 
-    } else {
+        if ($(this).hasClass("datesgreen")) {
 
-        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-            confessionBool: "b"
-        });
+            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+                confessionBool: "a"
+            })
+
+        } else {
+
+            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+                confessionBool: "b"
+            });
+        }
     }
+});
+
+$(".test").on("click", "#confirm", function () {
+    
+    $(".popup").remove();
+    clickerBool = true;
+
 
 });
