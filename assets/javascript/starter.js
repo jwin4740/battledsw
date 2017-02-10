@@ -1,5 +1,9 @@
 var boolBorder = false;
-var confessionArray = [];
+var confessionString = "d";
+var confessionString2 = "d";
+var confessionString3 = "d";
+var confessionString4 = "d";
+
 var year, month, days;
 var currentYear = moment().year();
 var currentMonth = moment().month();
@@ -8,6 +12,8 @@ var yearArray = [];
 var monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August",
     "September", "October", "November", "December"
 ];
+var monthCount = 0;
+var matchCount = 0;
 
 // Initialize Firebase
 var config = {
@@ -50,7 +56,7 @@ database.ref().once("value", function(snapshot) {
             var tempDaysInMonth = yearArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
-                var confessionConstructObj = new confessionConstruct(tempMonth, j, false);
+                var confessionConstructObj = new confessionConstruct(tempMonth, j, "b");
                 daysRef.set({ confessionConstructObj });
             }
         }
@@ -58,42 +64,53 @@ database.ref().once("value", function(snapshot) {
     }
 });
 
-// if firebase is already established then it pushes the values to confessionArray
-database.ref().once("value", function(snapshot) {
-    if (snapshot.child("2017").exists()) {
-        for (var i = 0; i < yearArray.length; i++) {
-            var tempMonth = yearArray[i].month;
-            var tempDaysInMonth = yearArray[i].monthLength;
+// if firebase is already established then it pushes the values to confessionString
+
+
+startUp(monthCount);
+
+
+function startUp(monthCount) {
+    database.ref().once("value", function(snapshot) {
+        if (snapshot.child("2017").exists()) {
+            var tempMonth = yearArray[monthCount].month;
+            var tempDaysInMonth = yearArray[monthCount].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 database.ref("/2017/" + tempMonth + "/" + j).on("child_added", function(childSnapshot) {
                     var day = childSnapshot.val().confessionBool;
-                    confessionArray.push(day);
-                    console.log(confessionArray);
+                    confessionString += day;
+
 
                 });
-            }
-            // setTimeout(initiatePage(tempMonth, tempDaysInMonth), 500);
-            
-        }
-        setTimeout(initiatePage(tempMonth, tempDaysInMonth), 5000);
-    }
-    // will work until I learn promises
-    console.log(yearArray);
-});
 
+
+
+            }
+            setTimeout(function() {
+                initiatePage(tempMonth, tempDaysInMonth)
+            }, 500);
+            // setTimeout(initiatePage(tempMonth, tempDaysInMonth), 5000);
+        }
+        // will work until I learn promises
+
+    });
+}
 
 function initiatePage(tempMonth, tempDaysInMonth) {
+    monthCount++;
+    
     var monthHead = $("<h2 class='monthHeader'>" + tempMonth + "</h2>");
     $(".test").append(monthHead);
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
+        matchCount++;
         var monthBox = $("<div class='" + tempMonth + "day'></div>");
-
-        if (confessionArray[i] === true) {
+        monthBox.addClass("datesblack");
+        var confessionInt = confessionString[matchCount];
+       
+        if (confessionInt === "a") {
+            console.log(confessionInt);
             console.log("show green");
             monthBox.addClass("datesgreen");
-        } else {
-            monthBox.addClass("datesblack");
-
         }
 
         monthBox.attr("data-value", i);
@@ -101,8 +118,15 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         monthBox.text(i);
         $(".test").append(monthBox);
     }
-    console.log(confessionArray)
+    console.log(confessionString);
     $(".test").append("<br style='clear: both;'><hr>");
+
+
+    if (monthCount < 12) {
+
+        startUp(monthCount)
+
+    }
 }
 
 
@@ -114,25 +138,15 @@ $(".test").on("click", ".datesblack", function() {
 
     if ($(this).hasClass("datesgreen")) {
 
-
-        var confessionConstructObj = new confessionConstruct(month, clickedVal, true);
-        database.ref("/2017/" + month + "/" + clickedVal).set({
-            confessionConstructObj
-        });
-
+        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+            confessionBool: "a"
+        })
 
     } else {
-        var confessionConstructObj = new confessionConstruct(month, clickedVal, false);
-        database.ref("/2017/" + month + "/" + clickedVal).set({
-            confessionConstructObj
+
+        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+            confessionBool: "b"
         });
-
     }
-
-    // var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
-    //             daysRef.push({
-    //                 confession: false,
-    //                 init: "no"
-    //             });
 
 });
