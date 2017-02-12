@@ -12,6 +12,24 @@ body {
     margin: 10px;
 }
 
+#login{
+    position: relative;
+    width: 295px;
+    height: 290px;
+    padding: 20px;
+    margin-left: 520px;
+    border: solid 3px black;
+}
+
+.signin{
+    width: 250px;
+    height: 30px;
+    margin-bottom: 15px;
+}
+
+.userHeader{
+    margin-bottom: 5px;
+}
 #runway {
     margin: 0px;
 }

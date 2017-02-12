@@ -1,11 +1,13 @@
 // day variables
 
-$('.collapsible').collapsible();
+
 
 
 // and change the toggle function to look like this-
 
-
+var togClass;
+var userName = "testUser";
+var password = "";
 var keyBool = true;
 var confessionArray = ["blank"];
 var fallArray = ["blank"];
@@ -37,6 +39,60 @@ var config = {
 };
 firebase.initializeApp(config);
 var database = firebase.database();
+$("#logout").on("click", function() {
+
+    signOut();
+
+
+});
+$("#submituser").on("click", function() {
+    userName = $("#username").val();
+    password = $("#password").val();
+    
+    signIn();
+    
+   
+
+});
+
+
+ displayUser();
+function displayUser() {
+    $("#displayUser").html(username + " is logged in");
+
+}
+
+function createUser() {
+    firebase.auth().createUserWithEmailAndPassword(userName, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+    });
+}
+
+
+function signIn() {
+    firebase.auth().signInWithEmailAndPassword(userName, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+    });
+
+
+}
+
+
+function signOut() {
+    firebase.auth().signOut().then(function() {
+        console.log("you are signed out");
+    }, function(error) {
+        console.log(error);
+    });
+}
+$('.collapsible').collapsible();
 
 function yearConstruct(year, month, monthLength) {
     this.year = year,
@@ -62,7 +118,20 @@ for (var i = 1; i <= 12; i++) {
 }
 console.log(yearArray);
 
-
+database.ref().once("value", function(snapshot) {
+    if (!snapshot.child(userName + "/2017").exists()) {
+        for (var i = 0; i < yearArray.length; i++) {
+            tempMonth = yearArray[i].month;
+            tempDaysInMonth = yearArray[i].monthLength;
+            for (var j = 1; j < tempDaysInMonth + 1; j++) {
+                var daysRef = database.ref(userName + "/2017/" + tempMonth + "/" + j);
+                var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
+                daysRef.set({ confessionConstructObj });
+            }
+        }
+        console.log("it doesnt exist");
+    }
+});
 database.ref().once("value", function(snapshot) {
     if (!snapshot.child("2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
@@ -159,7 +228,7 @@ $("li").on("click", ".datesblack", function() {
         //     var subclass = ($(this));
         //     console.log(subclass);
         //     var parentClass = ($(this)[0].parentElement.classList[0]);
-        var togClass = $(this)[0];
+        togClass = $(this)[0];
         console.log(togClass);
         $(this).toggleClass("datesgreen");
         clickedVal = parseInt($(this)[0].firstChild.data);
@@ -180,24 +249,29 @@ $("li").on("click", ".datesblack", function() {
             });
         }
     }
-   
-    $(document).on("keypress", togClass, function(event) {
-        if (event.key === "o") {
-             clickerVal();
 
-     
-        }
-        if (event.key === "e") {
-            return;
-        }
-    });
 
+
+});
+
+$(document).on("keypress", togClass, function(event) {
+    if (event.key === "o") {
+        clickerVal();
+        return;
+
+
+    }
+    if (event.key === "e") {
+        return;
+    }
 });
 
 function clickerVal() {
 
     var funClick = $("." + month + "day");
     console.log(month + "day");
-    funClick[clickedVal - 1].append("A");
-    
+    var blackDot = $("<img src='/assets/images/blackdot.png>");
+    var whiteDot = $("<p>");
+    funClick[clickedVal - 1].append(whiteDot);
+
 }
