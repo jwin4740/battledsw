@@ -39,8 +39,8 @@ hr {
 }
 
 .monthcontainer{
-    width: 100%;
-    border: solid 2px black;
+    width: 75%;
+   
     height: 600px;
 }
 .datesblack {
@@ -70,4 +70,16 @@ hr {
     z-index: 2;
     background-color: gray;
     opacity: 0.85;
+}
+
+.accordionHeader{
+    color: blue;
+    margin-top: 0px;
+    text-decoration: underline;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.accordionButton {
+
 }

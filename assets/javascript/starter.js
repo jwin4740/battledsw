@@ -6,13 +6,14 @@ $('.collapsible').collapsible();
 // and change the toggle function to look like this-
 
 
-
+var keyBool = true;
 var confessionArray = ["blank"];
 var fallArray = ["blank"];
 var massArray = ["blank"];
-
+var tempMonth;
+var tempDaysInMonth;
 var clickerBool = true;
-
+var clickedVal;
 var year, month, days;
 var currentYear = moment().year();
 var currentMonth = moment().month();
@@ -65,8 +66,8 @@ console.log(yearArray);
 database.ref().once("value", function(snapshot) {
     if (!snapshot.child("2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
-            var tempMonth = yearArray[i].month;
-            var tempDaysInMonth = yearArray[i].monthLength;
+            tempMonth = yearArray[i].month;
+            tempDaysInMonth = yearArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
                 var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
                 var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
@@ -96,13 +97,7 @@ function startUp(monthCount) {
                     confessionArray.push(day);
                     fallArray.push(fall);
                     massArray.push(mass);
-
-
-
                 });
-
-
-
             }
             setTimeout(function() {
                 initiatePage(tempMonth, tempDaysInMonth)
@@ -120,9 +115,9 @@ function initiatePage(tempMonth, tempDaysInMonth) {
     console.log(fallArray);
     console.log(massArray);
     var monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
-    var monthHead = $("<h2 class='monthHeader'>" + tempMonth + "</h2>");
+    var days = $("<strong><h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5></strong>");
     $("#" + tempMonth).append(monthContainer);
-    monthContainer.append(monthHead);
+    monthContainer.append(days);
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
         matchCount++;
         var monthBox = $("<div class='" + tempMonth + "day'>");
@@ -158,19 +153,19 @@ $("li").on("click", ".datesblack", function() {
     console.log($(this)[0].attributes[2].nodeValue);
     if (clickerBool === true) {
 
-       
 
-    //     var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
-    //     var subclass = ($(this));
-    //     console.log(subclass);
-    //     var parentClass = ($(this)[0].parentElement.classList[0]);
-    var togClass = $(this)[0];
-    console.log(togClass);
+
+        //     var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
+        //     var subclass = ($(this));
+        //     console.log(subclass);
+        //     var parentClass = ($(this)[0].parentElement.classList[0]);
+        var togClass = $(this)[0];
+        console.log(togClass);
         $(this).toggleClass("datesgreen");
-        var clickedVal = parseInt($(this)[0].firstChild.data);
+        clickedVal = parseInt($(this)[0].firstChild.data);
         console.log(clickedVal);
-        var month = $(this)[0].attributes[2].nodeValue
-    //     // $("." + parentClass).append(popup);
+        month = $(this)[0].attributes[2].nodeValue
+            //     // $("." + parentClass).append(popup);
 
         if ($(this).hasClass("datesgreen")) {
 
@@ -185,6 +180,24 @@ $("li").on("click", ".datesblack", function() {
             });
         }
     }
+   
+    $(document).on("keypress", togClass, function(event) {
+        if (event.key === "o") {
+             clickerVal();
+
+     
+        }
+        if (event.key === "e") {
+            return;
+        }
+    });
+
 });
 
+function clickerVal() {
 
+    var funClick = $("." + month + "day");
+    console.log(month + "day");
+    funClick[clickedVal - 1].append("A");
+    
+}

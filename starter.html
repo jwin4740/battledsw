@@ -9,88 +9,80 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <script src="https://use.fontawesome.com/6f90550cef.js"></script>
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.8/firebase.js"></script>
 </head>
+<!--  <span> <button><i class="fa fa-plus-square" aria-hidden="true"></i></button><span>January</span></span> -->
 
 <body>
-    <div id="popup"></div>
-    <div id="style">
-        <div class="weekday">SUNDAY</div>
-        <div class="weekday">MONDAY</div>
-        <div class="weekday">TUESDAY</div>
-        <div class="weekday">WEDNESDAY</div>
-        <div class="weekday">THURSDAY</div>
-        <div class="weekday">FRIDAY</div>
-        <div class="weekday">SATURDAY</div>
-    </div>
     <div class="collapsemonths">
         <ul class="collapsible" data-collapsible="accordion">
             <li>
-                <div style="height: 30px;" class="collapsible-header active">
-                    <h5>January</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header active">
+                    <h6 class="accordionHeader">January 2017</h6></div>
                 <div id="January" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>February</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">February 2017</h6></div>
                 <div id="February" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>March</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">March 2017</h6></div>
                 <div id="March" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>April</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">April 2017</h6></div>
                 <div id="April" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>May</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">May 2017</h6></div>
                 <div id="May" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>June</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">June 2017</h6></div>
                 <div id="June" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>July</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">July 2017</h6></div>
                 <div id="July" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>August</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">August 2017</h6></div>
                 <div id="August" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>September</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">September 2017</h6></div>
                 <div id="September" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>October</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">October 2017</h6></div>
                 <div id="October" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>November</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">November 2017</h6></div>
                 <div id="November" class="collapsible-body"></div>
             </li>
             <li>
-                <div style="height: 30px;" class="collapsible-header">
-                    <h5>December</h5></div>
+                <div style="background-color: #D0D3D4; padding-top: 6px; height: 30px; text-align: center;" class="collapsible-header">
+                    <h6 class="accordionHeader">December 2017</h6></div>
                 <div id="December" class="collapsible-body"></div>
             </li>
         </ul>
     </div>
-  <!--   <div id="datesContainer">
+    <!--   <div id="datesContainer">
         <div class="test"></div>
     </div> -->
     <!-- <script alt="starter.js" src="assets/javascript/pushfirebase.js"></script>
