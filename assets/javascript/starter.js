@@ -6,7 +6,7 @@
 // and change the toggle function to look like this-
 
 var togClass;
-var userName = "testUser";
+var userName;
 var password = "";
 var keyBool = true;
 var confessionArray = ["blank"];
@@ -27,6 +27,8 @@ var monthsArray = ["January", "February", "March", "April", "May", "June", "July
 var monthCount = 0;
 var matchCount = 0;
 
+var boxSelected;
+
 
 
 // Initialize Firebase
@@ -39,6 +41,7 @@ var config = {
 };
 firebase.initializeApp(config);
 var database = firebase.database();
+
 $("#logout").on("click", function() {
 
     signOut();
@@ -48,22 +51,22 @@ $("#logout").on("click", function() {
 $("#submituser").on("click", function() {
     userName = $("#username").val();
     password = $("#password").val();
-    
+
     signIn();
-    
-   
+
 
 });
 
 
- displayUser();
+
+
 function displayUser() {
-    $("#displayUser").html(username + " is logged in");
+    $("#displayUser").html(userName + " is logged in");
 
 }
 
 function createUser() {
-    firebase.auth().createUserWithEmailAndPassword(userName, password).catch(function(error) {
+    firebase.auth().createUserWithEmailAndPassword("jwin4740@gmail.com", "helloworld").catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -79,6 +82,9 @@ function signIn() {
         var errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
+        displayUser();
+        $("#username").val("");
+        $("#password").val("");
     });
 
 
@@ -117,7 +123,16 @@ for (var i = 1; i <= 12; i++) {
     yearArray.push(yearConstructObj);
 }
 console.log(yearArray);
+// create popup
+var popUpDiv = $("<div id='menu'>");
+var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
+var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
+var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
+popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
+$("#login").append(popUpDiv);
 
+
+$("#login").append(popUpDiv);
 database.ref().once("value", function(snapshot) {
     if (!snapshot.child(userName + "/2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
@@ -191,6 +206,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         matchCount++;
         var monthBox = $("<div class='" + tempMonth + "day'>");
         monthBox.addClass("datesblack");
+        monthBox.addClass(tempMonth + i);
         var confessionInt = confessionArray[matchCount];
 
         if (confessionInt === "a") {
@@ -222,7 +238,12 @@ $("li").on("click", ".datesblack", function() {
     console.log($(this)[0].attributes[2].nodeValue);
     if (clickerBool === true) {
 
-
+var popUpDiv = $("<div id='menu'>");
+var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
+var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
+var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
+popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
+$(this).append(popUpDiv);
 
         //     var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
         //     var subclass = ($(this));
@@ -254,24 +275,29 @@ $("li").on("click", ".datesblack", function() {
 
 });
 
-$(document).on("keypress", togClass, function(event) {
-    if (event.key === "o") {
-        clickerVal();
-        return;
-
-
-    }
-    if (event.key === "e") {
-        return;
-    }
+$("#login").on("click", "#confession", function() {
+    console.log("helloworld");
+    console.log(month);
+    console.log(clickedVal);
+    $("." + month + clickedVal).append("yo");
 });
+//     if (event.key === "e") {
+//         return;
+//     }
+// });
 
-function clickerVal() {
+// function clickerVal() {
 
-    var funClick = $("." + month + "day");
-    console.log(month + "day");
-    var blackDot = $("<img src='/assets/images/blackdot.png>");
-    var whiteDot = $("<p>");
-    funClick[clickedVal - 1].append(whiteDot);
+//     var funClick = $("." + month + "day");
+//     console.log(month + "day");
+//     var blackDot = $("<img src='/assets/images/blackdot.png>");
+//     var whiteDot = $("<p>");
+//     funClick[clickedVal - 1].append(whiteDot);
 
-}
+// }
+
+
+// mySQL workbench, set up PHP environment with Apache
+// established local host
+// look up wamp or xamp
+// mongo
