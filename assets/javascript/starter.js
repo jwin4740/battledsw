@@ -1,8 +1,4 @@
 // day variables
-
-
-
-
 // and change the toggle function to look like this-
 
 var togClass;
@@ -123,16 +119,8 @@ for (var i = 1; i <= 12; i++) {
     yearArray.push(yearConstructObj);
 }
 console.log(yearArray);
-// create popup
-var popUpDiv = $("<div id='menu'>");
-var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
-var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
-var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
-popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
-$("#login").append(popUpDiv);
 
 
-$("#login").append(popUpDiv);
 database.ref().once("value", function(snapshot) {
     if (!snapshot.child(userName + "/2017").exists()) {
         for (var i = 0; i < yearArray.length; i++) {
@@ -199,14 +187,16 @@ function initiatePage(tempMonth, tempDaysInMonth) {
     console.log(fallArray);
     console.log(massArray);
     var monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
-    var days = $("<strong><h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5></strong>");
+    var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
     $("#" + tempMonth).append(monthContainer);
     monthContainer.append(days);
+    
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
         matchCount++;
         var monthBox = $("<div class='" + tempMonth + "day'>");
         monthBox.addClass("datesblack");
         monthBox.addClass(tempMonth + i);
+        var openButton = $("<button class='openMenu'>+</button>");
         var confessionInt = confessionArray[matchCount];
 
         if (confessionInt === "a") {
@@ -218,6 +208,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         monthBox.attr("data-value", i);
         monthBox.attr("data-month", tempMonth);
         monthBox.text(i);
+        monthBox.append(openButton);
         monthContainer.append(monthBox);
 
     }
@@ -233,28 +224,32 @@ function initiatePage(tempMonth, tempDaysInMonth) {
 }
 
 
-$("li").on("click", ".datesblack", function() {
-    console.log($(this)[0]);
-    console.log($(this)[0].attributes[2].nodeValue);
+$("li").on("click", ".openMenu", function() {
+    console.log($(this).parent());
+     clickedVal = parseInt($(this).parent()[0].childNodes[0].data);
+    var parentDiv = $(this).parent()[0];
+    console.log(parentDiv);
+    
+   
     if (clickerBool === true) {
+        var popUpContainer = $("<div id='popContainer'>");
+        var popUpDivContain = $("<div id='menuContain'>");
+        var popUpExit = $("<button id='exit'>x</button>");
+        var popUpDiv = $("<div id='menu'>");
+        var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
+        var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
+        var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
+        popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
+        popUpDivContain.append(popUpExit).append(popUpDiv);
+        popUpContainer.append(popUpDivContain);
 
-var popUpDiv = $("<div id='menu'>");
-var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
-var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
-var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
-popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
-$(this).append(popUpDiv);
-
-        //     var popup = $("<div style='float: right;' class='popup'><input id='confession'><input id='fall'><input id='mass'><button id='confirm'>Confirm</button></div>");
-        //     var subclass = ($(this));
-        //     console.log(subclass);
-        //     var parentClass = ($(this)[0].parentElement.classList[0]);
+        parentDiv.append(popUpContainer);
         togClass = $(this)[0];
         console.log(togClass);
-        $(this).toggleClass("datesgreen");
-        clickedVal = parseInt($(this)[0].firstChild.data);
+        $(this).parent().toggleClass("datesgreen");
+        
         console.log(clickedVal);
-        month = $(this)[0].attributes[2].nodeValue
+        month = $(this).parent()[0].dataset.month;      
             //     // $("." + parentClass).append(popup);
 
         if ($(this).hasClass("datesgreen")) {
@@ -269,6 +264,7 @@ $(this).append(popUpDiv);
                 confessionBool: "b"
             });
         }
+        clickerBool = false;
     }
 
 
@@ -280,6 +276,11 @@ $("#login").on("click", "#confession", function() {
     console.log(month);
     console.log(clickedVal);
     $("." + month + clickedVal).append("yo");
+});
+
+$("li").on("click", "#exit", function() {
+    clickerBool = true;
+    console.log("exit");
 });
 //     if (event.key === "e") {
 //         return;

@@ -12,7 +12,7 @@ body {
     margin: 10px;
 }
 
-#login{
+#login {
     position: relative;
     width: 295px;
     height: 290px;
@@ -21,31 +21,20 @@ body {
     border: solid 3px black;
 }
 
-.signin{
+.signin {
     width: 250px;
     height: 30px;
     margin-bottom: 15px;
 }
 
-.userHeader{
+.userHeader {
     margin-bottom: 5px;
 }
+
 #runway {
     margin: 0px;
 }
 
-#menu{
-    border: solid 2px black;
-    width: 100px;
-    height: 100px;
-    padding: 5px;
-    /*display: none;*/
-}
-.popButton{
-    height: 20px;
-    width: 75px;
-    margin-bottom: 2px;
-}
 .weekday {
     display: inline-block;
     float: left;
@@ -68,10 +57,23 @@ hr {
     margin-left: 25px;
 }
 
-.monthcontainer{
+.monthcontainer {
     width: 75%;
     height: 600px;
 }
+.openMenu {
+    float: right;
+    width: 18px;
+    height: 18px;
+    padding: 0px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.daysofweek{
+    clear: both;
+}
+
 .datesblack {
     position: relative;
     float: left;
@@ -90,18 +92,40 @@ hr {
     cursor: pointer;
 }
 
-.popup {
+#menuContain {
     position: relative;
-    border: solid 2px gray;
-    height: 90px;
-    width: 115px;
+    height: 95px;
+    width: 125px;
     cursor: pointer;
     z-index: 2;
-    background-color: gray;
-    opacity: 0.85;
+    border: solid 2px black;
 }
 
-.accordionHeader{
+#exit {
+    float: right;
+    width: 18px;
+    height: 18px;
+    padding: 0px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.popButton {
+    height: 20px;
+    width: 65px;
+    margin-bottom: 2px;
+    font-size: 10px;
+}
+
+#menu {
+    clear: both;
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+    /*display: none;*/
+}
+
+.accordionHeader {
     color: blue;
     margin-top: 0px;
     text-decoration: underline;
@@ -109,6 +133,4 @@ hr {
     font-weight: 700;
 }
 
-.accordionButton {
-
-}
+.accordionButton {}
