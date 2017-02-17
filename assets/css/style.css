@@ -96,7 +96,24 @@ hr {
     width: 125px;
     cursor: pointer;
 }
-
+.blackDiv{
+    clear: both;
+     
+}
+.blackP{
+    background-image: url(../images/blackdot.png);
+    background-size: cover;
+    height: 25px;
+    width: 25px; 
+    float: left;
+    margin-right: 3px;
+}
+.massDiv{
+    float: left;
+}
+.land{
+    clear:both;
+}
 #popContainer {
     position: relative;
     z-index: 2;

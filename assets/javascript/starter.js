@@ -1,6 +1,7 @@
 // day variables
 // and change the toggle function to look like this-
-
+var novoFall;
+var fallLanding;
 var togClass;
 var userName;
 var password = "";
@@ -199,6 +200,9 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         monthBox.addClass("datesblack");
         monthBox.addClass(tempMonth + i);
         var openButton = $("<button class='openMenu'>+</button>");
+        var blackDiv = $("<div class='blackDiv'>");
+        var massDiv = $("<div class='massDiv'>");
+        var communionP = $("<p class='communionP'>");
         var popUpRunway = $("<div class='popUpRunway land" + tempMonth + i + "'>");
         var confessionInt = confessionArray[matchCount];
 
@@ -207,11 +211,11 @@ function initiatePage(tempMonth, tempDaysInMonth) {
             console.log("show green");
             monthBox.addClass("datesgreen");
         }
-
+        massDiv.append(communionP);
         monthBox.attr("data-value", i);
         monthBox.attr("data-month", tempMonth);
         monthBox.text(i);
-        monthBox.append(openButton).append(popUpRunway);
+        monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
         monthContainer.append(monthBox);
 
     }
@@ -269,12 +273,6 @@ clickerBool = false;
 
 
 
-
-
-// mySQL workbench, set up PHP environment with Apache
-// established local host
-// look up wamp or xamp
-// mongo
 function popUpInfo(destination) {
     var popUpContainer = $("<div id='popContainer'>");
     var popUpDivContain = $("<div id='menuContain'>");
@@ -301,8 +299,28 @@ $("li").on("click", "#confession", function() {
     var removeBox = $(this).parent("div").parent().parent().parent();
    switchBox = $(this).parent("div").parent().parent().parent().parent();
    switchBox.toggleClass("datesgreen");
+      if (switchBox.hasClass("datesgreen")) {
+
+            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+                confessionBool: "a"
+            })
+
+        } else {
+
+            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+                confessionBool: "b"
+            });
+        }
   removeBox.empty();
   clickerBool = true;
 });
 
+$("li").on("click", "#falls", function() {
+   fallLanding = $(this).parent("div").parent().parent().parent().parent()[0].children[1];
+  makeFall(fallLanding);
+});
 
+function makeFall (destination){
+    novoFall = $("<p class='blackP'>");
+    destination.append("hello");
+}
