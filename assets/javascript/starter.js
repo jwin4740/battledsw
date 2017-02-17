@@ -22,8 +22,10 @@ var monthsArray = ["January", "February", "March", "April", "May", "June", "July
 ];
 var monthCount = 0;
 var matchCount = 0;
-
+var lander;
 var boxSelected;
+var switchBox;
+var ancestor;
 
 
 
@@ -190,13 +192,14 @@ function initiatePage(tempMonth, tempDaysInMonth) {
     var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
     $("#" + tempMonth).append(monthContainer);
     monthContainer.append(days);
-    
+
     for (var i = 1; i < tempDaysInMonth + 1; i++) {
         matchCount++;
         var monthBox = $("<div class='" + tempMonth + "day'>");
         monthBox.addClass("datesblack");
         monthBox.addClass(tempMonth + i);
         var openButton = $("<button class='openMenu'>+</button>");
+        var popUpRunway = $("<div class='popUpRunway land" + tempMonth + i + "'>");
         var confessionInt = confessionArray[matchCount];
 
         if (confessionInt === "a") {
@@ -208,7 +211,7 @@ function initiatePage(tempMonth, tempDaysInMonth) {
         monthBox.attr("data-value", i);
         monthBox.attr("data-month", tempMonth);
         monthBox.text(i);
-        monthBox.append(openButton);
+        monthBox.append(openButton).append(popUpRunway);
         monthContainer.append(monthBox);
 
     }
@@ -226,31 +229,21 @@ function initiatePage(tempMonth, tempDaysInMonth) {
 
 $("li").on("click", ".openMenu", function() {
     console.log($(this).parent());
-     clickedVal = parseInt($(this).parent()[0].childNodes[0].data);
+    clickedVal = parseInt($(this).parent()[0].childNodes[0].data);
     var parentDiv = $(this).parent()[0];
     console.log(parentDiv);
-    
-   
-    if (clickerBool === true) {
-        var popUpContainer = $("<div id='popContainer'>");
-        var popUpDivContain = $("<div id='menuContain'>");
-        var popUpExit = $("<button id='exit'>x</button>");
-        var popUpDiv = $("<div id='menu'>");
-        var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
-        var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
-        var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
-        popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
-        popUpDivContain.append(popUpExit).append(popUpDiv);
-        popUpContainer.append(popUpDivContain);
+    month = $(this).parent()[0].dataset.month;
+   lander = $(".land" + month + clickedVal);
+    console.log(lander.selector);
 
-        parentDiv.append(popUpContainer);
-        togClass = $(this)[0];
-        console.log(togClass);
-        $(this).parent().toggleClass("datesgreen");
-        
-        console.log(clickedVal);
-        month = $(this).parent()[0].dataset.month;      
-            //     // $("." + parentClass).append(popup);
+    if (clickerBool === true) {
+
+        // popUpInfo();
+        // $(this).parent().toggleClass("datesgreen");
+
+      popUpInfo(lander.selector);
+
+        //     // $("." + parentClass).append(popup);
 
         if ($(this).hasClass("datesgreen")) {
 
@@ -264,41 +257,52 @@ $("li").on("click", ".openMenu", function() {
                 confessionBool: "b"
             });
         }
-        clickerBool = false;
+
     }
 
-
+clickerBool = false;
 
 });
 
-$("#login").on("click", "#confession", function() {
-    console.log("helloworld");
-    console.log(month);
-    console.log(clickedVal);
-    $("." + month + clickedVal).append("yo");
-});
 
-$("li").on("click", "#exit", function() {
-    clickerBool = true;
-    console.log("exit");
-});
-//     if (event.key === "e") {
-//         return;
-//     }
-// });
 
-// function clickerVal() {
 
-//     var funClick = $("." + month + "day");
-//     console.log(month + "day");
-//     var blackDot = $("<img src='/assets/images/blackdot.png>");
-//     var whiteDot = $("<p>");
-//     funClick[clickedVal - 1].append(whiteDot);
 
-// }
+
 
 
 // mySQL workbench, set up PHP environment with Apache
 // established local host
 // look up wamp or xamp
 // mongo
+function popUpInfo(destination) {
+    var popUpContainer = $("<div id='popContainer'>");
+    var popUpDivContain = $("<div id='menuContain'>");
+    var popUpExit = $("<button id='exit'>x</button>");
+    var popUpDiv = $("<div id='menu'>");
+    var popUpConfession = $("<button id='confession' class='popButton'>CONFESS</button>");
+    var popUpFalls = $("<button id='falls' class='popButton'>FALLS</button>");
+    var popUpMass = $("<button id='mass' class='popButton'>MASS</button>");
+    popUpDiv.append(popUpConfession).append(popUpFalls).append(popUpMass);
+    popUpDivContain.append(popUpExit).append(popUpDiv);
+    popUpContainer.append(popUpDivContain);
+    $(destination).append(popUpContainer);
+
+}
+
+$("li").on("click", "#exit", function() {
+   ancestor = $(this).parent("div").parent().parent();
+   ancestor.empty();
+    clickerBool = true;
+    console.log(ancestor);
+});
+
+$("li").on("click", "#confession", function() {
+    var removeBox = $(this).parent("div").parent().parent().parent();
+   switchBox = $(this).parent("div").parent().parent().parent().parent();
+   switchBox.toggleClass("datesgreen");
+  removeBox.empty();
+  clickerBool = true;
+});
+
+
