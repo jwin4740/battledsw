@@ -61,19 +61,21 @@ hr {
     width: 75%;
     height: 600px;
 }
+
 .openMenu {
-    float: right;
+    float: left;
     width: 18px;
     height: 18px;
     padding: 0px;
     font-weight: bolder;
     cursor: pointer;
 }
-.popUpRunway{
+
+.popUpRunway {
     clear: both;
 }
 
-.daysofweek{
+.daysofweek {
     clear: both;
 }
 
@@ -95,13 +97,21 @@ hr {
     cursor: pointer;
 }
 
+#popContainer {
+    position: relative;
+    z-index: 2;
+    background-color: gray;
+    opacity: 0.9;
+    top: -18px;
+    border: solid 1px black;
+}
+
 #menuContain {
     position: relative;
     height: 95px;
-    width: 125px;
+    width: 118px;
     cursor: pointer;
     z-index: 2;
-    border: solid 2px black;
 }
 
 #exit {
