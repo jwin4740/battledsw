@@ -14,10 +14,11 @@ var tempDaysInMonth;
 var clickerBool = true;
 var clickedVal;
 var year, month, days;
-var currentYear = moment().year();
-var currentMonth = moment().month();
-var monthLength = moment().daysInMonth();
-var yearArray = [];
+var currentYear = "";
+var currentMonth = 0;
+var monthLength = 0;
+var yearsCoveredArray = ["2016", "2017"]; // hard coded
+var yearObjectArray = [];
 var monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August",
     "September", "October", "November", "December"
 ];
@@ -41,62 +42,62 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-$("#logout").on("click", function() {
+// $("#logout").on("click", function() {
 
-    signOut();
-
-
-});
-$("#submituser").on("click", function() {
-    userName = $("#username").val();
-    password = $("#password").val();
-
-    signIn();
+//     signOut();
 
 
-});
+// });
+// $("#submituser").on("click", function() {
+//     userName = $("#username").val();
+//     password = $("#password").val();
+
+//     signIn();
+
+
+// });
 
 
 
 
-function displayUser() {
-    $("#displayUser").html(userName + " is logged in");
+// function displayUser() {
+//     $("#displayUser").html(userName + " is logged in");
 
-}
+// }
 
-function createUser() {
-    firebase.auth().createUserWithEmailAndPassword("jwin4740@gmail.com", "helloworld").catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-    });
-}
-
-
-function signIn() {
-    firebase.auth().signInWithEmailAndPassword(userName, password).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        displayUser();
-        $("#username").val("");
-        $("#password").val("");
-    });
+// function createUser() {
+//     firebase.auth().createUserWithEmailAndPassword("jwin4740@gmail.com", "helloworld").catch(function(error) {
+//         // Handle Errors here.
+//         var errorCode = error.code;
+//         var errorMessage = error.message;
+//         // ...
+//     });
+// }
 
 
-}
+// function signIn() {
+//     firebase.auth().signInWithEmailAndPassword(userName, password).catch(function(error) {
+//         // Handle Errors here.
+//         var errorCode = error.code;
+//         var errorMessage = error.message;
+//         console.log(errorCode);
+//         console.log(errorMessage);
+//         displayUser();
+//         $("#username").val("");
+//         $("#password").val("");
+//     });
 
 
-function signOut() {
-    firebase.auth().signOut().then(function() {
-        console.log("you are signed out");
-    }, function(error) {
-        console.log(error);
-    });
-}
+// }
+
+
+// function signOut() {
+//     firebase.auth().signOut().then(function() {
+//         console.log("you are signed out");
+//     }, function(error) {
+//         console.log(error);
+//     });
+// }
 $('.collapsible').collapsible();
 
 function yearConstruct(year, month, monthLength) {
@@ -115,48 +116,41 @@ function confessionConstruct(month, day, confessionBool, numFalls, numMass) {
 }
 
 
-for (var i = 1; i <= 12; i++) {
-    month = moment().month(i - 1).format("MMMM");
-    monthLength = moment(i, "M").daysInMonth();
-    var yearConstructObj = new yearConstruct(currentYear, month, monthLength);
-    yearArray.push(yearConstructObj);
+// push yearConstructor objects to an 
+for (var j = 0; j < yearsCoveredArray.length; j++) {
+    currentYear = yearsCoveredArray[j];
+    for (var i = 1; i <= 12; i++) {
+        month = moment().year(currentYear).month(i - 1).format("MMMM");
+        monthLength = moment().year(currentYear).month(i - 1).daysInMonth();
+        var yearConstructObj = new yearConstruct(currentYear, month, monthLength);
+        yearObjectArray.push(yearConstructObj);
+    }
 }
-console.log(yearArray);
+console.log(yearObjectArray);
+
 
 
 database.ref().once("value", function(snapshot) {
-    if (!snapshot.child(userName + "/2017").exists()) {
-        for (var i = 0; i < yearArray.length; i++) {
-            tempMonth = yearArray[i].month;
-            tempDaysInMonth = yearArray[i].monthLength;
+    for (var k = 0; k < yearsCoveredArray.length; k++) {
+        currentYear = yearsCoveredArray[k];
+        for (var i = 0; i < yearObjectArray.length; i++) {
+            tempMonth = yearObjectArray[i].month;
+            tempDaysInMonth = yearObjectArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
-                var daysRef = database.ref(userName + "/2017/" + tempMonth + "/" + j);
+                var daysRef = database.ref("/" + currentYear + "/" + tempMonth + "/" + j);
                 var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
                 daysRef.set({ confessionConstructObj });
             }
         }
-        console.log("it doesnt exist");
+
     }
-});
-database.ref().once("value", function(snapshot) {
-    if (!snapshot.child("2017").exists()) {
-        for (var i = 0; i < yearArray.length; i++) {
-            tempMonth = yearArray[i].month;
-            tempDaysInMonth = yearArray[i].monthLength;
-            for (var j = 1; j < tempDaysInMonth + 1; j++) {
-                var daysRef = database.ref("/2017/" + tempMonth + "/" + j);
-                var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
-                daysRef.set({ confessionConstructObj });
-            }
-        }
-        console.log("it doesnt exist");
-    }
+
 });
 
 // if firebase is already established then it pushes the values to confessionArray
 
 
-startUp(monthCount);
+// startUp(monthCount);
 
 
 function startUp(monthCount) {
