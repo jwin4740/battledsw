@@ -237,7 +237,7 @@ $("li").on("click", ".openMenu", function() {
     var parentDiv = $(this).parent()[0];
     console.log(parentDiv);
     month = $(this).parent()[0].dataset.month;
-   lander = $(".land" + month + clickedVal);
+    lander = $(".land" + month + clickedVal);
     console.log(lander.selector);
 
     if (clickerBool === true) {
@@ -245,7 +245,7 @@ $("li").on("click", ".openMenu", function() {
         // popUpInfo();
         // $(this).parent().toggleClass("datesgreen");
 
-      popUpInfo(lander.selector);
+        popUpInfo(lander.selector);
 
         //     // $("." + parentClass).append(popup);
 
@@ -264,7 +264,7 @@ $("li").on("click", ".openMenu", function() {
 
     }
 
-clickerBool = false;
+    clickerBool = false;
 
 });
 
@@ -289,38 +289,39 @@ function popUpInfo(destination) {
 }
 
 $("li").on("click", "#exit", function() {
-   ancestor = $(this).parent("div").parent().parent();
-   ancestor.empty();
+    ancestor = $(this).parent("div").parent().parent();
+    ancestor.empty();
     clickerBool = true;
     console.log(ancestor);
 });
 
 $("li").on("click", "#confession", function() {
     var removeBox = $(this).parent("div").parent().parent().parent();
-   switchBox = $(this).parent("div").parent().parent().parent().parent();
-   switchBox.toggleClass("datesgreen");
-      if (switchBox.hasClass("datesgreen")) {
+    switchBox = $(this).parent("div").parent().parent().parent().parent();
+    switchBox.toggleClass("datesgreen");
+    if (switchBox.hasClass("datesgreen")) {
 
-            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-                confessionBool: "a"
-            })
+        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+            confessionBool: "a"
+        })
 
-        } else {
+    } else {
 
-            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-                confessionBool: "b"
-            });
-        }
-  removeBox.empty();
-  clickerBool = true;
+        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
+            confessionBool: "b"
+        });
+    }
+    removeBox.empty();
+    clickerBool = true;
 });
 
 $("li").on("click", "#falls", function() {
-   fallLanding = $(this).parent("div").parent().parent().parent().parent()[0].children[1];
-  makeFall(fallLanding);
+    fallLanding = $(this).parent("div").parent().parent().parent().parent()[0].children[1];
+    makeFall(fallLanding);
 });
 
-function makeFall (destination){
-    novoFall = $("<p class='blackP'>");
-    destination.append("hello");
+function makeFall(destination) {
+    novoFall = $("<p class='blackP'></p>");
+    console.log(novoFall);
+    destination.append(novoFall[0]);
 }
