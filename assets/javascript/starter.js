@@ -1,9 +1,12 @@
 // day variables
 // and change the toggle function to look like this-
+var confessionBool = ""
+var day = "";
 var novoFall;
 var fallLanding;
 var togClass;
 var userName;
+var snapshotArray = [];
 var password = "";
 var keyBool = true;
 var confessionArray = ["blank"];
@@ -28,6 +31,7 @@ var lander;
 var boxSelected;
 var switchBox;
 var ancestor;
+var confessionConstructObj = "";
 
 
 
@@ -130,52 +134,56 @@ console.log(yearObjectArray);
 
 
 
-database.ref().once("value", function(snapshot) {
+// database.ref().once("value", function(snapshot) {
+//     for (var k = 0; k < yearsCoveredArray.length; k++) {
+//         currentYear = yearsCoveredArray[k];
+//         for (var i = 0; i < yearObjectArray.length; i++) {
+//             tempMonth = yearObjectArray[i].month;
+//             tempDaysInMonth = yearObjectArray[i].monthLength;
+//             for (var j = 1; j < tempDaysInMonth + 1; j++) {
+//                 var daysRef = database.ref("/" + currentYear + "/" + tempMonth + "/" + j);
+//                 var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
+//                 daysRef.set({ confessionConstructObj });
+//             }
+//         }
+//     }
+// });
+
+// if firebase is already established then it pushes the values to confessionArray
+
+setTimeout(function() { startUp(); }, 3000);
+
+function startUp() {
+
     for (var k = 0; k < yearsCoveredArray.length; k++) {
         currentYear = yearsCoveredArray[k];
-        for (var i = 0; i < yearObjectArray.length; i++) {
+        for (var i = 0; i < yearObjectArray.length - 12; i++) {
             tempMonth = yearObjectArray[i].month;
             tempDaysInMonth = yearObjectArray[i].monthLength;
             for (var j = 1; j < tempDaysInMonth + 1; j++) {
-                var daysRef = database.ref("/" + currentYear + "/" + tempMonth + "/" + j);
-                var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
-                daysRef.set({ confessionConstructObj });
+                database.ref("/" + currentYear + "/" + tempMonth + "/" + j + "/" + confessionConstructObj).once("value", function(snapshot) {
+                    var day = snapshot.val();
+                    confessionArray.push(day);
+
+                });
             }
         }
 
     }
-
-});
-
-// if firebase is already established then it pushes the values to confessionArray
+    console.log(confessionArray);
 
 
-// startUp(monthCount);
+    setTimeout(function() { readBool(); }, 3000);
+}
+
+function readBool() {
+console.log(confessionArray.length);
+    for (var j = 1; j < confessionArray.length; j++) {
+        console.log(confessionArray[j].confessionConstructObj.confessionBool);
+    }
 
 
-function startUp(monthCount) {
-    database.ref().once("value", function(snapshot) {
-        if (snapshot.child("2017").exists()) {
-            var tempMonth = yearArray[monthCount].month;
-            var tempDaysInMonth = yearArray[monthCount].monthLength;
-            for (var j = 1; j < tempDaysInMonth + 1; j++) {
-                database.ref("/2017/" + tempMonth + "/" + j).on("child_added", function(childSnapshot) {
-                    var day = childSnapshot.val().confessionBool;
-                    var fall = childSnapshot.val().numFalls;
-                    var mass = childSnapshot.val().numMass;
-                    confessionArray.push(day);
-                    fallArray.push(fall);
-                    massArray.push(mass);
-                });
-            }
-            setTimeout(function() {
-                initiatePage(tempMonth, tempDaysInMonth)
-            }, 200);
-            // setTimeout(initiatePage(tempMonth, tempDaysInMonth), 5000);
-        }
-        // will work until I learn promises
 
-    });
 }
 
 function initiatePage(tempMonth, tempDaysInMonth) {
