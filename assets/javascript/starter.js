@@ -9,9 +9,8 @@ var userName;
 var snapshotArray = [];
 var password = "";
 var keyBool = true;
-var confessionArray = ["blank"];
-var fallArray = ["blank"];
-var massArray = ["blank"];
+var dataArray = ["blank"];
+
 var tempMonth;
 var tempDaysInMonth;
 var clickerBool = true;
@@ -105,22 +104,24 @@ var database = firebase.database();
 $('.collapsible').collapsible();
 
 function yearConstruct(year, month, monthLength) {
-    this.year = year,
-        this.month = month,
-        this.monthLength = monthLength
+    this.year = year;
+    this.month = month;
+    this.monthLength = monthLength;
 }
 
 
-function confessionConstruct(month, day, confessionBool, numFalls, numMass) {
-    this.month = month,
-        this.day = day,
-        this.confessionBool = confessionBool,
-        this.numFalls = numFalls,
-        this.numMass = numMass;
+function DataConstruct(year, month, day, confessionBool, numFalls, numMass, totalDaysInMonth) {
+    this.year = year;
+    this.month = month;
+    this.day = day;
+    this.confessionBool = confessionBool;
+    this.numFalls = numFalls;
+    this.numMass = numMass;
+    this.totalDaysInMonth = totalDaysInMonth;
 }
 
 
-// push yearConstructor objects to an 
+// push yearConstructor objects to an array
 for (var j = 0; j < yearsCoveredArray.length; j++) {
     currentYear = yearsCoveredArray[j];
     for (var i = 1; i <= 12; i++) {
@@ -135,101 +136,87 @@ console.log(yearObjectArray);
 
 
 // database.ref().once("value", function(snapshot) {
-//     for (var k = 0; k < yearsCoveredArray.length; k++) {
-//         currentYear = yearsCoveredArray[k];
-//         for (var i = 0; i < yearObjectArray.length; i++) {
-//             tempMonth = yearObjectArray[i].month;
-//             tempDaysInMonth = yearObjectArray[i].monthLength;
-//             for (var j = 1; j < tempDaysInMonth + 1; j++) {
-//                 var daysRef = database.ref("/" + currentYear + "/" + tempMonth + "/" + j);
-//                 var confessionConstructObj = new confessionConstruct(tempMonth, j, "b", 0, 0);
-//                 daysRef.set({ confessionConstructObj });
-//             }
+//     for (var i = 0; i < yearObjectArray.length; i++) {
+//         if (i < 12) {
+//             currentYear = "2016";
+//         } else {
+//             currentYear = "2017";
 //         }
+//         tempMonth = yearObjectArray[i].month;
+//         tempDaysInMonth = yearObjectArray[i].monthLength;
+//         console.log(tempDaysInMonth);
+//         for (var j = 1; j < tempDaysInMonth + 1; j++) {
+//             var daysRef = database.ref("/" + currentYear + "/" + tempMonth + "/" + j);
+//             var dataConstructObj = new DataConstruct(currentYear, tempMonth, j, 0, 0, 0, tempDaysInMonth);
+//             daysRef.set({ dataConstructObj });
+//         }
+
 //     }
 // });
 
 // if firebase is already established then it pushes the values to confessionArray
 
-setTimeout(function() { startUp(); }, 3000);
 
-function startUp() {
-
-    for (var k = 0; k < yearsCoveredArray.length; k++) {
-        currentYear = yearsCoveredArray[k];
-        for (var i = 0; i < yearObjectArray.length - 12; i++) {
-            tempMonth = yearObjectArray[i].month;
-            tempDaysInMonth = yearObjectArray[i].monthLength;
-            for (var j = 1; j < tempDaysInMonth + 1; j++) {
-                database.ref("/" + currentYear + "/" + tempMonth + "/" + j + "/" + confessionConstructObj).once("value", function(snapshot) {
-                    var day = snapshot.val();
-                    confessionArray.push(day);
-
-                });
-            }
-        }
-
-    }
-    console.log(confessionArray);
-
-
-    setTimeout(function() { readBool(); }, 3000);
-}
-
-function readBool() {
-console.log(confessionArray.length);
-    for (var j = 1; j < confessionArray.length; j++) {
-        console.log(confessionArray[j].confessionConstructObj.confessionBool);
-    }
+var childData = "";
+var i = 0;
 
 
 
-}
+database.ref().once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+        childSnapshot.forEach(function(grandchildSnapshot) {
+            grandchildSnapshot.forEach(function(greatgrandchildSnapshot) {
+                greatgrandchildData = greatgrandchildSnapshot.val().dataConstructObj;
+                dataArray.push(greatgrandchildData);
 
-function initiatePage(tempMonth, tempDaysInMonth) {
-    monthCount++;
-    console.log(confessionArray);
-    console.log(fallArray);
-    console.log(massArray);
-    var monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
-    var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
-    $("#" + tempMonth).append(monthContainer);
-    monthContainer.append(days);
+            });
+        });
+    });
+    
+});
+setTimeout(function() {
+   initiatePage();
+}, 3000);
 
-    for (var i = 1; i < tempDaysInMonth + 1; i++) {
-        matchCount++;
-        var monthBox = $("<div class='" + tempMonth + "day'>");
-        monthBox.addClass("datesblack");
-        monthBox.addClass(tempMonth + i);
-        var openButton = $("<button class='openMenu'>+</button>");
-        var blackDiv = $("<div class='blackDiv'>");
-        var massDiv = $("<div class='massDiv'>");
-        var communionP = $("<p class='communionP'>");
-        var popUpRunway = $("<div class='popUpRunway land" + tempMonth + i + "'>");
-        var confessionInt = confessionArray[matchCount];
+function initiatePage() {
+    $("#January2016").append("hello world");
 
-        if (confessionInt === "a") {
+    // for (var j = 1; j < yearObjectArray.length + 1; j++) {
+    //     var monthContainer = $("<div class='" + dataArray.month + "container monthcontainer'>");
+    //     var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
+    //     $("#" + dataArray.month + "2016").append(monthContainer);
+    //     monthContainer.append(days);
 
-            console.log("show green");
-            monthBox.addClass("datesgreen");
-        }
-        massDiv.append(communionP);
-        monthBox.attr("data-value", i);
-        monthBox.attr("data-month", tempMonth);
-        monthBox.text(i);
-        monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
-        monthContainer.append(monthBox);
+    //     for (var i = 1; i < tempDaysInMonth + 1; i++) {
+    //         matchCount++;
+    //         var monthBox = $("<div class='" + dataArray.month + "day'>");
+    //         monthBox.addClass("datesblack");
+    //         monthBox.addClass(dataArray.month + i);
+    //         var openButton = $("<button class='openMenu'>+</button>");
+    //         var blackDiv = $("<div class='blackDiv'>");
+    //         var massDiv = $("<div class='massDiv'>");
+    //         var communionP = $("<p class='communionP'>");
+    //         var popUpRunway = $("<div class='popUpRunway land" + dataArray.month + i + "'>");
+    //         var dataBool = dataArray[matchCount];
 
-    }
+    //         if (dataBool === 1) {
 
-    $("#" + tempMonth).append("<br style='clear: both;'><hr>");
+    //             console.log("show green");
+    //             monthBox.addClass("datesgreen");
+    //         }
+    //         massDiv.append(communionP);
+    //         monthBox.attr("data-value", i);
+    //         monthBox.attr("data-month", dataArray.month);
+    //         monthBox.text(i);
+    //         monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
+    //         monthContainer.append(monthBox);
+
+    //     }
+
+    //     $("#" + dataArray.month).append("<br style='clear: both;'><hr>");
+    // }
 
 
-    if (monthCount < 12) {
-
-        startUp(monthCount);
-
-    }
 }
 
 
