@@ -21,8 +21,8 @@ var currentMonth = 0;
 var monthLength = 0;
 var yearsCoveredArray = ["2016", "2017"]; // hard coded
 var yearObjectArray = [];
-var monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August",
-    "September", "October", "November", "December"
+var monthsArray = ["April", "August", "December", "February", "January", "July", "June", "March",
+    "May", "November", "October", "September"
 ];
 var monthCount = 0;
 var matchCount = 0;
@@ -172,49 +172,50 @@ database.ref().once('value', function(snapshot) {
             });
         });
     });
-    
+    console.log(dataArray);
 });
 setTimeout(function() {
    initiatePage();
 }, 3000);
 
+var monthContainer;
 function initiatePage() {
-    $("#January2016").append("hello world");
+   
 
-    // for (var j = 1; j < yearObjectArray.length + 1; j++) {
-    //     var monthContainer = $("<div class='" + dataArray.month + "container monthcontainer'>");
-    //     var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
-    //     $("#" + dataArray.month + "2016").append(monthContainer);
-    //     monthContainer.append(days);
+    for (var j = 0; j < yearObjectArray.length; j++) {
+        monthContainer = $("<div class='" + monthsArray[j] + "container monthcontainer'>");
+        var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
+        $("#" + monthsArray[j] + "2016").append(monthContainer);
+        monthContainer.append(days);
 
-    //     for (var i = 1; i < tempDaysInMonth + 1; i++) {
-    //         matchCount++;
-    //         var monthBox = $("<div class='" + dataArray.month + "day'>");
-    //         monthBox.addClass("datesblack");
-    //         monthBox.addClass(dataArray.month + i);
-    //         var openButton = $("<button class='openMenu'>+</button>");
-    //         var blackDiv = $("<div class='blackDiv'>");
-    //         var massDiv = $("<div class='massDiv'>");
-    //         var communionP = $("<p class='communionP'>");
-    //         var popUpRunway = $("<div class='popUpRunway land" + dataArray.month + i + "'>");
-    //         var dataBool = dataArray[matchCount];
+        for (var i = 1; i < dataArray[j].totalDaysInMonth + 1; i++) {
+            matchCount++;
+            var monthBox = $("<div class='" + dataArray[j].month + "day'>");
+            monthBox.addClass("datesblack");
+            monthBox.addClass(dataArray[j].month + i);
+            var openButton = $("<button class='openMenu'>+</button>");
+            var blackDiv = $("<div class='blackDiv'>");
+            var massDiv = $("<div class='massDiv'>");
+            var communionP = $("<p class='communionP'>");
+            var popUpRunway = $("<div class='popUpRunway land" + dataArray[j].month + i + "'>");
+            var dataBool = dataArray[matchCount].confessionBool;
 
-    //         if (dataBool === 1) {
+            if (dataBool === 1) {
 
-    //             console.log("show green");
-    //             monthBox.addClass("datesgreen");
-    //         }
-    //         massDiv.append(communionP);
-    //         monthBox.attr("data-value", i);
-    //         monthBox.attr("data-month", dataArray.month);
-    //         monthBox.text(i);
-    //         monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
-    //         monthContainer.append(monthBox);
+                console.log("show green");
+                monthBox.addClass("datesgreen");
+            }
+            massDiv.append(communionP);
+            monthBox.attr("data-value", i);
+            monthBox.attr("data-month", dataArray.month);
+            monthBox.text(i);
+            monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
+            monthContainer.append(monthBox);
 
-    //     }
+        }
 
-    //     $("#" + dataArray.month).append("<br style='clear: both;'><hr>");
-    // }
+        $("#" + dataArray.month).append("<br style='clear: both;'><hr>");
+    }
 
 
 }
