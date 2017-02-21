@@ -231,7 +231,7 @@ function initiatePage() {
             var fallCounter = 0;
             if (numFalls != 0) {
                 do {
-                    makeFall(blackDiv);
+                    displayFalls(blackDiv);
                     fallCounter++;
                 }
                 while (fallCounter < numFalls);
@@ -352,10 +352,15 @@ $("li").on("click", "#falls", function() {
 
 });
 
+function displayFalls (destination) {
+    novoFall = $("<p class='blackP'></p>");
+    destination.append(novoFall[0]);
+
+}
 function makeFall(destination) {
     novoFall = $("<p class='blackP'></p>");
     destination.append(novoFall[0]);
     database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
-        numFalls: numFalls++
+        numFalls: numFalls + 1
     });
 }
