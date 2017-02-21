@@ -34,8 +34,10 @@ var ancestor;
 var confessionConstructObj = "";
 var keyArray = [];
 var numFalls = 0;
-
-
+var dataIndex = 0;
+var tempnumFalls = 0;
+var totalFallCount = 0;
+var totalConfessionCount = 0;
 
 // Initialize Firebase
 var config = {
@@ -191,8 +193,17 @@ database.ref().once('value', function(snapshot) {
 
 setTimeout(function() {
     initiatePage();
+    calculateTotals();
 }, 1500);
 
+function calculateTotals() {
+    for (var i = 1; i < dataArray.length; i++) {
+        totalFallCount += dataArray[i].numFalls;
+        totalConfessionCount += dataArray[i].confessionBool;
+    }
+    displayTotalCounts();
+
+}
 
 function initiatePage() {
     console.log(confessionArray.length);
@@ -206,7 +217,7 @@ function initiatePage() {
 
         tempMonth = keyArray[j];
         monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
-        var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
+        var days = $("<h4 class='daysofweek'> .......SUNDAY .............MONDAY ............TUESDAY .........WEDNESDAY .......THURSDAY .........FRIDAY ............SATURDAY</h4>");
         monthContainer.append(days);
         $("#" + tempMonth + tempYear).append(monthContainer);
         $("#" + tempMonth).append("<br style='clear: both;'><hr>");
@@ -217,6 +228,7 @@ function initiatePage() {
             matchCount++;
             var monthBox = $("<div class='" + tempMonth + "day'>");
             monthBox.addClass(tempYear);
+            monthBox.attr("data-count", matchCount);
             monthBox.addClass("datesblack");
             monthBox.addClass(tempMonth + i);
             var openButton = $("<button class='openMenu'>+</button>");
@@ -334,12 +346,15 @@ $("li").on("click", "#confession", function() {
         database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
             confessionBool: 1
         })
-
+        totalConfessionCount++;
+        displayTotalCounts();
     } else {
 
         database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
             confessionBool: 0
         });
+        totalConfessionCount--;
+        displayTotalCounts();
     }
     removeBox.empty();
     clickerBool = true;
@@ -347,20 +362,40 @@ $("li").on("click", "#confession", function() {
 
 $("li").on("click", "#falls", function() {
     fallLanding = $(this).parent("div").parent().parent().parent().parent()[0].children[1];
+    dataIndex = parseInt($(this).parent("div").parent().parent().parent().parent()[0].dataset.count);
+
+    tempnumFalls = dataArray[dataIndex].numFalls;
+    tempnumFalls++;
+    totalFallCount++;
+
+    dataArray[dataIndex].numFalls = tempnumFalls;
+
+    console.log(tempnumFalls);
+
+
+    displayTotalCounts();
     makeFall(fallLanding);
-   
+
+
 
 });
 
-function displayFalls (destination) {
+function displayFalls(destination) {
     novoFall = $("<p class='blackP'></p>");
     destination.append(novoFall[0]);
 
 }
+
 function makeFall(destination) {
     novoFall = $("<p class='blackP'></p>");
     destination.append(novoFall[0]);
     database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
-        numFalls: numFalls + 1
+        numFalls: tempnumFalls
     });
+}
+
+function displayTotalCounts() {
+    console.log(totalFallCount);
+    $("#totalFalls").html(totalFallCount);
+    $("#totalConfessions").html(totalConfessionCount);
 }
