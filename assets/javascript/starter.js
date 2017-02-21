@@ -9,6 +9,7 @@ var userName;
 var snapshotArray = [];
 var password = "";
 var keyBool = true;
+var confessionArray = ["blank"];
 var dataArray = ["blank"];
 var tempYear;
 var tempMonth;
@@ -32,6 +33,7 @@ var switchBox;
 var ancestor;
 var confessionConstructObj = "";
 var keyArray = [];
+var numFalls = 0;
 
 
 
@@ -172,25 +174,28 @@ database.ref().once('value', function(snapshot) {
 
 
             grandchildSnapshot.forEach(function(greatgrandchildSnapshot) {
-                greatgrandchildData = greatgrandchildSnapshot.val().dataConstructObj.confessionBool;
+                var greatgrandchildData = greatgrandchildSnapshot.val().dataConstructObj;
+                var confessionData = greatgrandchildSnapshot.val().dataConstructObj.confessionBool;
+                confessionArray.push(confessionData);
                 dataArray.push(greatgrandchildData);
 
             });
         });
     });
 
-    console.log(dataArray);
+    console.log(confessionArray);
     console.log(keyArray);
+    console.log(dataArray);
 });
 
 
 setTimeout(function() {
     initiatePage();
-}, 3000);
+}, 1500);
 
 
 function initiatePage() {
-    console.log(dataArray.length);
+    console.log(confessionArray.length);
 
     for (var j = 0; j < keyArray.length; j++) {
         if (j < 12) {
@@ -219,9 +224,21 @@ function initiatePage() {
             var massDiv = $("<div class='massDiv'>");
             var communionP = $("<p class='communionP'>");
             var popUpRunway = $("<div class='popUpRunway land" + tempMonth + i + "'>");
-            var dataBin = dataArray[matchCount];
 
-            if (dataBin === 1) {
+            // using dataArray values
+            var confessionBin = dataArray[matchCount].confessionBool;
+            numFalls = dataArray[matchCount].numFalls;
+            var fallCounter = 0;
+            if (numFalls != 0) {
+                do {
+                    makeFall(blackDiv);
+                    fallCounter++;
+                }
+                while (fallCounter < numFalls);
+            }
+
+
+            if (confessionBin === 1) {
                 console.log("show green");
                 monthBox.addClass("datesgreen");
             }
@@ -246,7 +263,7 @@ $("li").on("click", ".openMenu", function() {
     console.log(clickedVal);
     var parentDiv = $(this).parent()[0];
     console.log(parentDiv);
-   year = $(this).parent()[0].classList[1];
+    year = $(this).parent()[0].classList[1];
 
     month = $(this).parent()[0].dataset.month;
     console.log(month);
@@ -331,10 +348,14 @@ $("li").on("click", "#confession", function() {
 $("li").on("click", "#falls", function() {
     fallLanding = $(this).parent("div").parent().parent().parent().parent()[0].children[1];
     makeFall(fallLanding);
+   
+
 });
 
 function makeFall(destination) {
     novoFall = $("<p class='blackP'></p>");
-    console.log(novoFall);
     destination.append(novoFall[0]);
+    database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
+        numFalls: numFalls++
+    });
 }
