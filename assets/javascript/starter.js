@@ -10,9 +10,9 @@ var snapshotArray = [];
 var password = "";
 var keyBool = true;
 var dataArray = ["blank"];
-
+var tempYear;
 var tempMonth;
-var tempDaysInMonth;
+var tempDaysInMonth = 0;
 var clickerBool = true;
 var clickedVal;
 var year, month, days;
@@ -31,6 +31,7 @@ var boxSelected;
 var switchBox;
 var ancestor;
 var confessionConstructObj = "";
+var keyArray = [];
 
 
 
@@ -131,7 +132,9 @@ for (var j = 0; j < yearsCoveredArray.length; j++) {
         yearObjectArray.push(yearConstructObj);
     }
 }
+
 console.log(yearObjectArray);
+
 
 
 
@@ -165,56 +168,72 @@ var i = 0;
 database.ref().once('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
         childSnapshot.forEach(function(grandchildSnapshot) {
+            keyArray.push(grandchildSnapshot.key);
+
+
             grandchildSnapshot.forEach(function(greatgrandchildSnapshot) {
-                greatgrandchildData = greatgrandchildSnapshot.val().dataConstructObj;
+                greatgrandchildData = greatgrandchildSnapshot.val().dataConstructObj.confessionBool;
                 dataArray.push(greatgrandchildData);
 
             });
         });
     });
+
     console.log(dataArray);
+    console.log(keyArray);
 });
+
+
 setTimeout(function() {
-   initiatePage();
+    initiatePage();
 }, 3000);
 
-var monthContainer;
+
 function initiatePage() {
-   
+    console.log(dataArray.length);
 
-    for (var j = 0; j < yearObjectArray.length; j++) {
-        monthContainer = $("<div class='" + monthsArray[j] + "container monthcontainer'>");
+    for (var j = 0; j < keyArray.length; j++) {
+        if (j < 12) {
+            tempYear = "2016";
+        } else {
+            tempYear = "2017";
+        }
+
+        tempMonth = keyArray[j];
+        monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
         var days = $("<h5 class='daysofweek'> ...SUNDAY ..MONDAY ..TUESDAY WEDNESDAY THURSDAY FRIDAY ....SATURDAY</h5>");
-        $("#" + monthsArray[j] + "2016").append(monthContainer);
         monthContainer.append(days);
+        $("#" + tempMonth + tempYear).append(monthContainer);
+        $("#" + tempMonth).append("<br style='clear: both;'><hr>");
+        tempDaysInMonth = moment().year(tempYear).month(tempMonth).daysInMonth();
+        console.log(tempDaysInMonth);
 
-        for (var i = 1; i < dataArray[j].totalDaysInMonth + 1; i++) {
+        for (var i = 1; i < tempDaysInMonth + 1; i++) {
             matchCount++;
-            var monthBox = $("<div class='" + dataArray[j].month + "day'>");
+            var monthBox = $("<div class='" + tempMonth + "day'>");
+            monthBox.addClass(tempYear);
             monthBox.addClass("datesblack");
-            monthBox.addClass(dataArray[j].month + i);
+            monthBox.addClass(tempMonth + i);
             var openButton = $("<button class='openMenu'>+</button>");
             var blackDiv = $("<div class='blackDiv'>");
             var massDiv = $("<div class='massDiv'>");
             var communionP = $("<p class='communionP'>");
-            var popUpRunway = $("<div class='popUpRunway land" + dataArray[j].month + i + "'>");
-            var dataBool = dataArray[matchCount].confessionBool;
+            var popUpRunway = $("<div class='popUpRunway land" + tempMonth + i + "'>");
+            var dataBin = dataArray[matchCount];
 
-            if (dataBool === 1) {
-
+            if (dataBin === 1) {
                 console.log("show green");
                 monthBox.addClass("datesgreen");
             }
             massDiv.append(communionP);
             monthBox.attr("data-value", i);
-            monthBox.attr("data-month", dataArray.month);
+            monthBox.attr("data-month", tempMonth);
             monthBox.text(i);
             monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
             monthContainer.append(monthBox);
 
         }
 
-        $("#" + dataArray.month).append("<br style='clear: both;'><hr>");
     }
 
 
@@ -224,31 +243,35 @@ function initiatePage() {
 $("li").on("click", ".openMenu", function() {
     console.log($(this).parent());
     clickedVal = parseInt($(this).parent()[0].childNodes[0].data);
+    console.log(clickedVal);
     var parentDiv = $(this).parent()[0];
     console.log(parentDiv);
+   year = $(this).parent()[0].classList[1];
+
     month = $(this).parent()[0].dataset.month;
+    console.log(month);
     lander = $(".land" + month + clickedVal);
-    console.log(lander.selector);
+    console.log(lander);
 
     if (clickerBool === true) {
 
         // popUpInfo();
         // $(this).parent().toggleClass("datesgreen");
 
-        popUpInfo(lander.selector);
+        popUpInfo(lander);
 
         //     // $("." + parentClass).append(popup);
 
         if ($(this).hasClass("datesgreen")) {
-
-            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-                confessionBool: "a"
+            console.log(year);
+            database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
+                confessionBool: 1
             })
 
         } else {
-
-            database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-                confessionBool: "b"
+            console.log(year);
+            database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
+                confessionBool: 0
             });
         }
 
@@ -291,14 +314,14 @@ $("li").on("click", "#confession", function() {
     switchBox.toggleClass("datesgreen");
     if (switchBox.hasClass("datesgreen")) {
 
-        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-            confessionBool: "a"
+        database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
+            confessionBool: 1
         })
 
     } else {
 
-        database.ref("/2017/" + month + "/" + clickedVal + "/confessionConstructObj").update({
-            confessionBool: "b"
+        database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
+            confessionBool: 0
         });
     }
     removeBox.empty();
