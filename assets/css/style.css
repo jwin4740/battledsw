@@ -60,7 +60,7 @@ hr {
 .monthcontainer {
     width: 75%;
     height: 600px;
-  
+
 }
 
 .openMenu {
@@ -109,8 +109,18 @@ hr {
     float: left;
     margin-right: 3px;
 }
-.massDiv{
+
+
+.massP{
+    background-image: url(../images/churchclipart.jpeg);
+    background-size: cover;
+    height: 30px;
+    width: 30px; 
     float: left;
+    margin-right: 3px;
+}
+.massDiv{
+    clear: both;
 }
 .land{
     clear:both;

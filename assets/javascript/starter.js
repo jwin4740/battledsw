@@ -2,11 +2,17 @@
 // and change the toggle function to look like this-
 var monthConfessionCount = 0;
 var monthFallCount = 0;
+var monthMassCount = 0;
+
 var confessionBool = ""
 var day = "";
 var novoFall;
+var novoMass;
+var massLanding;
 var fallLanding;
 var togClass;
+var tempnumMass = 0;
+
 var userName;
 var snapshotArray = [];
 var password = "";
@@ -36,10 +42,12 @@ var ancestor;
 var confessionConstructObj = "";
 var keyArray = [];
 var numFalls = 0;
+var numMass = 0;
 var dataIndex = 0;
 var tempnumFalls = 0;
 var totalFallCount = 0;
 var totalConfessionCount = 0;
+var totalMassCount = 0;
 
 // Initialize Firebase
 var config = {
@@ -202,6 +210,7 @@ function calculateTotals() {
     for (var i = 1; i < dataArray.length; i++) {
         totalFallCount += dataArray[i].numFalls;
         totalConfessionCount += dataArray[i].confessionBool;
+        totalMassCount += dataArray[i].numMass;
     }
     displayTotalCounts();
 
@@ -216,14 +225,16 @@ function initiatePage() {
         } else {
             tempYear = "2017";
         }
+        monthMassCount = 0;
         monthFallCount = 0;
         monthConfessionCount = 0;
         tempMonth = keyArray[j];
         monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
+
         var days = $("<h4 class='daysofweek'> .......SUNDAY .............MONDAY ............TUESDAY .........WEDNESDAY .......THURSDAY .........FRIDAY ............SATURDAY</h4>");
         monthContainer.append(days);
         $("#" + tempMonth + tempYear).append(monthContainer);
-        $("#" + tempMonth).append("<br style='clear: both;'><hr>");
+
         tempDaysInMonth = moment().year(tempYear).month(tempMonth).daysInMonth();
         console.log(tempDaysInMonth);
 
@@ -243,7 +254,9 @@ function initiatePage() {
             // using dataArray values
             var confessionBin = dataArray[matchCount].confessionBool;
             numFalls = dataArray[matchCount].numFalls;
+            numMass = dataArray[matchCount].numMass;
             var fallCounter = 0;
+            var massCounter = 0;
             if (numFalls != 0) {
                 do {
                     displayFalls(blackDiv);
@@ -251,6 +264,14 @@ function initiatePage() {
                     monthFallCount++;
                 }
                 while (fallCounter < numFalls);
+            }
+            if (numMass != 0) {
+                do {
+                    displayMass(massDiv);
+                    massCounter++;
+                    monthMassCount++;
+                }
+                while (massCounter < numMass);
             }
 
 
@@ -267,8 +288,11 @@ function initiatePage() {
             monthContainer.append(monthBox);
 
         } // internal for loop end
-$("#" + tempMonth + tempYear + "Falls").html(monthFallCount);
-$("#" + tempMonth + tempYear + "Confessions").html(monthConfessionCount);
+
+        $("#" + tempMonth + tempYear + "Falls").html(monthFallCount);
+        $("#" + tempMonth + tempYear + "Confessions").html(monthConfessionCount);
+        $("#" + tempMonth + tempYear + "Mass").html(monthMassCount);
+        $("#" + tempMonth + tempYear).append("<br style='clear: both;'><hr>");
 
     } // external for loop end
 
@@ -383,8 +407,6 @@ $("li").on("click", "#falls", function() {
     displayTotalCounts();
     makeFall(fallLanding);
 
-
-
 });
 
 function displayFalls(destination) {
@@ -405,4 +427,42 @@ function displayTotalCounts() {
     console.log(totalFallCount);
     $("#totalFalls").html(totalFallCount);
     $("#totalConfessions").html(totalConfessionCount);
+    $("#totalMass").html(totalMassCount);
+}
+
+
+
+
+
+$("li").on("click", "#mass", function() {
+    massLanding = $(this).parent("div").parent().parent().parent().parent()[0].children[2];
+
+    dataIndex = parseInt($(this).parent("div").parent().parent().parent().parent()[0].dataset.count);
+
+    tempnumMass = dataArray[dataIndex].numMass;
+    tempnumMass++;
+    totalMassCount++;
+
+    dataArray[dataIndex].numMass = tempnumMass;
+
+    console.log(tempnumMass);
+
+
+    displayTotalCounts();
+    makeMass(massLanding);
+
+});
+
+function displayMass(destination) {
+    novoMass = $("<p class='massP'></p>");
+    destination.append(novoMass[0]);
+
+}
+
+function makeMass(destination) {
+    novoMass = $("<p class='massP'></p>");
+    destination.append(novoMass[0]);
+    database.ref("/" + year + "/" + month + "/" + clickedVal + "/dataConstructObj").update({
+        numMass: tempnumMass
+    });
 }
