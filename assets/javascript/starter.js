@@ -1,3 +1,8 @@
+
+
+
+
+
 // day variables
 // and change the toggle function to look like this-
 var monthConfessionCount = 0;
@@ -28,7 +33,7 @@ var year, month, days;
 var currentYear = "";
 var currentMonth = 0;
 var monthLength = 0;
-var yearsCoveredArray = ["2016", "2017"]; // hard coded
+var yearsCoveredArray = ["2015", "2016", "2017"]; // hard coded
 var yearObjectArray = [];
 var monthsArray = ["April", "August", "December", "February", "January", "July", "June", "March",
     "May", "November", "October", "September"
@@ -48,6 +53,7 @@ var tempnumFalls = 0;
 var totalFallCount = 0;
 var totalConfessionCount = 0;
 var totalMassCount = 0;
+var tempFirstDay = "";
 
 // Initialize Firebase
 var config = {
@@ -155,8 +161,11 @@ console.log(yearObjectArray);
 // database.ref().once("value", function(snapshot) {
 //     for (var i = 0; i < yearObjectArray.length; i++) {
 //         if (i < 12) {
+//             currentYear = "2015";
+//         } else if (i < 24) {
 //             currentYear = "2016";
-//         } else {
+//         }
+//         else {
 //             currentYear = "2017";
 //         }
 //         tempMonth = yearObjectArray[i].month;
@@ -195,9 +204,9 @@ database.ref().once('value', function(snapshot) {
         });
     });
 
-    console.log(confessionArray);
-    console.log(keyArray);
-    console.log(dataArray);
+    // console.log(confessionArray);
+    // console.log(keyArray);
+    // console.log(dataArray);
 });
 
 
@@ -220,7 +229,10 @@ function initiatePage() {
     console.log(confessionArray.length);
 
     for (var j = 0; j < keyArray.length; j++) {
+
         if (j < 12) {
+            tempYear = "2015";
+        } else if (j < 24 && j > 11) {
             tempYear = "2016";
         } else {
             tempYear = "2017";
@@ -234,7 +246,10 @@ function initiatePage() {
         var days = $("<h4 class='daysofweek'> .......SUNDAY .............MONDAY ............TUESDAY .........WEDNESDAY .......THURSDAY .........FRIDAY ............SATURDAY</h4>");
         monthContainer.append(days);
         $("#" + tempMonth + tempYear).append(monthContainer);
-
+        tempFirstDay = moment().year(tempYear).month(tempMonth).date(1).format("dddd");
+        console.log(tempFirstDay);
+        console.log(tempYear);
+        console.log(tempMonth);
         tempDaysInMonth = moment().year(tempYear).month(tempMonth).daysInMonth();
         console.log(tempDaysInMonth);
 

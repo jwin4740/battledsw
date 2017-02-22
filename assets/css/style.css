@@ -12,6 +12,10 @@ body {
     margin: 10px;
 }
 
+#note{
+    font-size: 18px;
+}
+
 #login {
     position: relative;
     width: 295px;
