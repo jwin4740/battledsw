@@ -110,7 +110,9 @@ hr {
     margin-right: 3px;
 }
 
-
+ul{
+    list-style: none;
+}
 .massP{
     background-image: url(../images/churchclipart.jpeg);
     background-size: cover;
