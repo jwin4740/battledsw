@@ -1,5 +1,7 @@
 // day variables
 // and change the toggle function to look like this-
+var monthConfessionCount = 0;
+var monthFallCount = 0;
 var confessionBool = ""
 var day = "";
 var novoFall;
@@ -214,7 +216,8 @@ function initiatePage() {
         } else {
             tempYear = "2017";
         }
-
+        monthFallCount = 0;
+        monthConfessionCount = 0;
         tempMonth = keyArray[j];
         monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
         var days = $("<h4 class='daysofweek'> .......SUNDAY .............MONDAY ............TUESDAY .........WEDNESDAY .......THURSDAY .........FRIDAY ............SATURDAY</h4>");
@@ -245,6 +248,7 @@ function initiatePage() {
                 do {
                     displayFalls(blackDiv);
                     fallCounter++;
+                    monthFallCount++;
                 }
                 while (fallCounter < numFalls);
             }
@@ -253,6 +257,7 @@ function initiatePage() {
             if (confessionBin === 1) {
                 console.log("show green");
                 monthBox.addClass("datesgreen");
+                monthConfessionCount++;
             }
             massDiv.append(communionP);
             monthBox.attr("data-value", i);
@@ -261,9 +266,11 @@ function initiatePage() {
             monthBox.append(openButton).append(blackDiv).append(massDiv).append(popUpRunway);
             monthContainer.append(monthBox);
 
-        }
+        } // internal for loop end
+$("#" + tempMonth + tempYear + "Falls").html(monthFallCount);
+$("#" + tempMonth + tempYear + "Confessions").html(monthConfessionCount);
 
-    }
+    } // external for loop end
 
 
 }
