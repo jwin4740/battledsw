@@ -238,7 +238,7 @@ function initiatePage() {
         tempMonth = keyArray[j];
         monthContainer = $("<div class='" + tempMonth + "container monthcontainer'>");
 
-        var days = $("<h4 class='daysofweek'> .......SUNDAY .............MONDAY ............TUESDAY .........WEDNESDAY .......THURSDAY .........FRIDAY ............SATURDAY</h4>");
+        var days = $("<h4 class='daysofweek'>` .......SUNDAY .............MONDAY ............TUESDAY .........WEDNESDAY .......THURSDAY .........FRIDAY ............SATURDAY`</h4>");
         monthContainer.append(days);
         $("#" + tempMonth + tempYear).append(monthContainer);
         tempFirstDay = moment().year(tempYear).month(tempMonth).date(1).format("dddd");
