@@ -247,7 +247,7 @@ function initiatePage() {
         console.log(tempMonth);
         tempDaysInMonth = moment().year(tempYear).month(tempMonth).daysInMonth();
         console.log(tempDaysInMonth);
-        var blankMonthBox = $("<div class='" + tempMonth + "day'>");
+
         var giveBlanksCount = 0
         switch (tempFirstDay) {
             case "Monday":
@@ -282,10 +282,11 @@ function initiatePage() {
         console.log(giveBlanksCount);
         if (giveBlanksCount != 0) {
             for (var l = 0; l < giveBlanksCount; l++) {
+                var blankMonthBox = $("<div class='" + tempMonth + "day'>");
                 blankMonthBox.addClass(tempYear);
                 blankMonthBox.addClass("datesblack");
                 monthContainer.append(blankMonthBox);
-                monthContainer.append(blankMonthBox);
+
             }
         }
 
