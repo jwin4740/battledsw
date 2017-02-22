@@ -1,8 +1,3 @@
-
-
-
-
-
 // day variables
 // and change the toggle function to look like this-
 var monthConfessionCount = 0;
@@ -252,6 +247,47 @@ function initiatePage() {
         console.log(tempMonth);
         tempDaysInMonth = moment().year(tempYear).month(tempMonth).daysInMonth();
         console.log(tempDaysInMonth);
+        var blankMonthBox = $("<div class='" + tempMonth + "day'>");
+        var giveBlanksCount = 0
+        switch (tempFirstDay) {
+            case "Monday":
+
+                giveBlanksCount = 1;
+                break;
+            case "Tuesday":
+
+                giveBlanksCount = 2;
+                break;
+            case "Wednesday":
+
+                giveBlanksCount = 3;
+                break;
+            case "Thursday":
+
+                giveBlanksCount = 4;
+                break;
+            case "Friday":
+
+                giveBlanksCount = 5;
+                break;
+            case "Saturday":
+
+                giveBlanksCount = 6;
+                break;
+            default:
+
+                break;
+        }
+
+        console.log(giveBlanksCount);
+        if (giveBlanksCount != 0) {
+            for (var l = 0; l < giveBlanksCount; l++) {
+                blankMonthBox.addClass(tempYear);
+                blankMonthBox.addClass("datesblack");
+                monthContainer.append(blankMonthBox);
+                monthContainer.append(blankMonthBox);
+            }
+        }
 
         for (var i = 1; i < tempDaysInMonth + 1; i++) {
             matchCount++;
