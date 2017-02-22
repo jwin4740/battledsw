@@ -1,0 +1,5 @@
+- on each click added the month counts are changed without needing to refresh the page
+
+- allow for multiple confessions per day
+
+- the order that you click the confession matters and affects how it is diplayed so fix it so that order doesn't matter

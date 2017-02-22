@@ -103,6 +103,7 @@ hr {
 }
 .blackDiv{
     clear: both;
+    margin-left: 3px;
      
 }
 .blackP{
@@ -112,6 +113,7 @@ hr {
     width: 20px; 
     float: left;
     margin-right: 3px;
+    margin-bottom: 0px;
 }
 
 ul{
@@ -124,6 +126,8 @@ ul{
     width: 30px; 
     float: left;
     margin-right: 3px;
+    margin-top: 0px;
+
 }
 .massDiv{
     clear: both;
@@ -132,11 +136,11 @@ ul{
     clear:both;
 }
 #popContainer {
-    position: relative;
+    position: absolute;
     z-index: 2;
     background-color: gray;
     opacity: 0.9;
-    top: -18px;
+    top: 75px;
     border: solid 1px black;
 }
 
@@ -180,5 +184,17 @@ ul{
     font-weight: 700;
     cursor: pointer;
 }
+
+#totalFalls{
+    color: red;
+}
+#totalConfessions{
+    color: #00ff00;
+}
+#totalMass{
+    color: blue;
+}
+
+
 
 
