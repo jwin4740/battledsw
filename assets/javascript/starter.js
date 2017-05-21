@@ -1,5 +1,6 @@
 // day variables
 // and change the toggle function to look like this-
+
 var monthConfessionCount = 0;
 var monthFallCount = 0;
 var monthMassCount = 0;
@@ -61,6 +62,7 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
+
 // $("#logout").on("click", function() {
 
 //     signOut();
@@ -117,7 +119,19 @@ var database = firebase.database();
 //         console.log(error);
 //     });
 // }
+
+
+
 $('.collapsible').collapsible();
+
+
+// on load the page opens the current month's tab and content
+openCurrentMonthTab();
+function openCurrentMonthTab() {
+    var year = moment().format("YYYY");
+    var month = moment().format("MMMM")
+    $("#" + month + year).parent("li").children(0).addClass("active");
+}
 
 function yearConstruct(year, month, monthLength) {
     this.year = year;
@@ -221,6 +235,7 @@ function calculateTotals() {
 }
 
 function initiatePage() {
+
     console.log(confessionArray.length);
 
     for (var j = 0; j < keyArray.length; j++) {
@@ -518,4 +533,3 @@ function makeMass(destination) {
         numMass: tempnumMass
     });
 }
-

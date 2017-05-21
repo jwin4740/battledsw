@@ -3,3 +3,11 @@
 - allow for multiple confessions per day
 
 - the order that you click the confession matters and affects how it is diplayed so fix it so that order doesn't matter
+
+- put in links to helpful sites
+
+- allow for significant events and notes for each day
+
+- put in significant events like good friday, single fall days
+
+- graphs with D3 api

@@ -1,0 +1,149 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    height: 700px;
+}
+
+#style {
+    width: 85%;
+    height: 20px;
+    margin: 10px;
+}
+
+#login {
+    position: relative;
+    width: 295px;
+    height: 290px;
+    padding: 20px;
+    margin-left: 520px;
+    border: solid 3px black;
+}
+
+.signin {
+    width: 250px;
+    height: 30px;
+    margin-bottom: 15px;
+}
+
+.userHeader {
+    margin-bottom: 5px;
+}
+
+#runway {
+    margin: 0px;
+}
+
+.weekday {
+    display: inline-block;
+    float: left;
+    width: 130px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+hr {
+    clear: both;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#datesContainer {
+    width: 75%;
+    height: 600px;
+    margin-left: 25px;
+}
+
+.monthcontainer {
+    width: 75%;
+    height: 600px;
+}
+
+.openMenu {
+    float: left;
+    width: 18px;
+    height: 18px;
+    padding: 0px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.popUpRunway {
+    clear: both;
+}
+
+.daysofweek {
+    clear: both;
+}
+
+.datesblack {
+    position: relative;
+    float: left;
+    border: solid 1px black;
+    height: 105px;
+    width: 125px;
+    cursor: pointer;
+}
+
+.datesgreen {
+    position: relative;
+    float: left;
+    border: solid 4px #00ff00;
+    height: 105px;
+    width: 125px;
+    cursor: pointer;
+}
+
+#popContainer {
+    position: relative;
+    z-index: 2;
+    background-color: gray;
+    opacity: 0.9;
+    top: -18px;
+    border: solid 1px black;
+}
+
+#menuContain {
+    position: relative;
+    height: 95px;
+    width: 118px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#exit {
+    float: right;
+    width: 18px;
+    height: 18px;
+    padding: 0px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.popButton {
+    height: 20px;
+    width: 65px;
+    margin-bottom: 2px;
+    font-size: 10px;
+}
+
+#menu {
+    clear: both;
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+    /*display: none;*/
+}
+
+.accordionHeader {
+    color: blue;
+    margin-top: 0px;
+    text-decoration: underline;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.accordionButton {}
